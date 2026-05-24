@@ -1,9 +1,3 @@
-- por enquanto o investimento é calculado sobre as receitas do mes. mas pode ser alterado sobre receitas - despesas futuramente.
-- o dinheiro sobrado é o que nao foi gasto nem investido, ele entra no novo mes como uma receita diferente das normais. Sobre esse nao é calculado porcentagem de investimento, nem dizimo, ele é livre de tudo.
-- dizimo é valor fixo de 10% sobre as receitas mensais. vem antes de tudo, gastos, investimentos, etc. itens como esse, devem ser inseridos pelo proprio usuario no sistema. no caso pode vir como recomedação.
-- Single-user no MVP, mas com estrutura preparada para multi-user no futuro. Login será adicionado em uma etapa posterior.
-- gostaria de analise de mese anteriores, comparações, e outros graficos.
-- as categorias de despesas sera criada pelo user no proprio sistema. "despesa necessaria" vai ser uma campo no proprio gasto, ao inserir o gasto marco isso ou nao.
 
 
 
@@ -32,3 +26,12 @@ Tenho dificuldade em pensar no layalte, entao preciso de sua ajuda. Devido isso 
 ## tecnologias
 
 Quero usar React para front. BD com supabase, e backend com python e fastAPI.
+
+# mais informações
+- por enquanto o investimento é calculado sobre as receitas do mes. mas pode ser alterado sobre receitas - despesas futuramente.
+- o dinheiro sobrado é o que nao foi gasto nem investido, ele entra no novo mes como uma receita diferente das normais. Sobre esse nao é calculado porcentagem de investimento, nem dizimo, ele é livre de tudo.
+- dizimo é valor fixo de 10% sobre as receitas mensais. vem antes de tudo, gastos, investimentos, etc. itens como esse, devem ser inseridos pelo proprio usuario no sistema. no caso pode vir como recomedação.
+- Single-user no MVP, mas com estrutura preparada para multi-user no futuro. Login será adicionado em uma etapa posterior.
+- gostaria de analise de mese anteriores, comparações, e outros graficos.
+- as categorias de despesas sera criada pelo user no proprio sistema. "despesa necessaria" vai ser uma campo no proprio gasto, ao inserir o gasto marco isso ou nao.
+
