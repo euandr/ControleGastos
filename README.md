@@ -4,7 +4,7 @@ Sistema web de controle de gastos pessoais desenvolvido com **React**, **FastAPI
 
 ## 🎯 O que é?
 
-ControleGastos é um sistema full-stack que replica e expande as funcionalidades de uma planilha Excel de controle de despesas. Permite gerenciar receitas, despesas categorizads e visualizar análises com gráficos.
+ControleGastos é um sistema full-stack que replica e expande as funcionalidades de uma planilha Excel de controle financeiro. O modelo atual é centrado em `transacoes`, com suporte a categorias, tags e anotações por mês de referência.
 
 ## 🛠️ Stack
 
@@ -12,9 +12,23 @@ ControleGastos é um sistema full-stack que replica e expande as funcionalidades
 - **Backend**: FastAPI + Python 3.11
 - **Database**: Supabase (PostgreSQL)
 
+## 🧱 Modelo de Dados
+
+- `usuarios` - usuários do sistema
+- `transacoes` - núcleo financeiro do app
+- `categorias` e `transacoes_categorias` - classificação por categorias
+- `tags` e `transacoes_tags` - marcadores livres
+- `anotacoes` - observações por período
+
 ## 📚 Documentação
 
-Toda a documentação pessoal está em `/docs/`. Execute o script para gerar:
+Toda a documentação pessoal está em `/docs/`.
+
+Os pontos de entrada mais importantes são:
+
+- [docs/DATABASE/02-schema.md](docs/DATABASE/02-schema.md) - esquema final do banco
+- [docs/DIAGRAMAS/er-diagram.md](docs/DIAGRAMAS/er-diagram.md) - ER atualizado
+- [docs/PLANO.md](docs/PLANO.md) - visão geral do projeto
 
 ## 🚀 Início Rápido
 

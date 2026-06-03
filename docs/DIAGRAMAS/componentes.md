@@ -6,7 +6,7 @@
 ┌─────────────────────────────────────┐
 │     FRONTEND (React + Vite)         │
 │  Port: 5173                         │
-│  - Pages (Dashboard, Income, etc)   │
+│  - Pages (Dashboard, Transações, etc)│
 │  - Components (Button, Card, etc)   │
 │  - Services (Axios, Context)        │
 └────────────────┬────────────────────┘
@@ -14,7 +14,7 @@
 ┌────────────────▼────────────────────┐
 │     BACKEND (FastAPI)               │
 │  Port: 8000                         │
-│  - Routes (/api/income, etc)        │
+│  - Routes (/api/transacoes, etc)    │
 │  - Schemas (Validação)              │
 │  - Services (Lógica negócio)        │
 │  - Models (SQLAlchemy)              │
@@ -23,7 +23,7 @@
 ┌────────────────▼────────────────────┐
 │     DATABASE (PostgreSQL)           │
 │  Port: 5432                         │
-│  - 7 Tabelas (users, months, etc)   │
+│  - 7 Tabelas (usuarios, transacoes, etc)│
 │  - Índices e constraints            │
 └─────────────────────────────────────┘
 ```
@@ -61,7 +61,7 @@
 
 - PostgreSQL (relacional)
 - Supabase (hosting)
-- 7 tabelas interconectadas
+- Modelo centrado em transacoes, categorias, tags e anotacoes
 
 ---
 

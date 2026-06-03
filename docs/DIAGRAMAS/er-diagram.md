@@ -6,69 +6,68 @@ Copie e cole em: https://www.plantuml.com/plantuml/uml/
 
 ```plantuml
 @startuml ControleGastos_ER
-entity "users" as users {
+entity "usuarios" as usuarios {
     * id : UUID <<PK>>
     email : VARCHAR(255)
-    name : VARCHAR(255)
-    password_hash : VARCHAR(255)
+    nome : VARCHAR(255)
+    senha_hash : TEXT
+    criado_em : TIMESTAMP
 }
 
-entity "months" as months {
+entity "transacoes" as transacoes {
     * id : UUID <<PK>>
-    * user_id : UUID <<FK>>
-    month : DATE
-    total_income : DECIMAL
-    total_expenses : DECIMAL
-    balance : DECIMAL
+    * usuario_id : UUID <<FK>>
+    descricao : TEXT
+    valor : DECIMAL(10,2)
+    tipo : VARCHAR(20)
+    natureza : VARCHAR(20)
+    necessidade : BOOLEAN
+    metodo_pagamento : VARCHAR(20)
+    data : DATE
+    mes_ref : CHAR(7)
+    criado_em : TIMESTAMP
 }
 
-entity "income" as income {
+entity "categorias" as categorias {
     * id : UUID <<PK>>
-    * user_id : UUID <<FK>>
-    * month_id : UUID <<FK>>
-    description : VARCHAR
-    amount : DECIMAL
+    * usuario_id : UUID <<FK>>
+    nome : VARCHAR(100)
+    cor : VARCHAR(7)
+    criado_em : TIMESTAMP
 }
 
-entity "expense_categories" as categories {
+entity "transacoes_categorias" as transacoes_categorias {
+    * transacao_id : UUID <<PK,FK>>
+    * categoria_id : UUID <<PK,FK>>
+}
+
+entity "tags" as tags {
     * id : UUID <<PK>>
-    * user_id : UUID <<FK>>
-    name : VARCHAR
-    color : VARCHAR
+    * usuario_id : UUID <<FK>>
+    nome : VARCHAR(50)
 }
 
-entity "expenses" as expenses {
+entity "transacoes_tags" as transacoes_tags {
+    * transacao_id : UUID <<PK,FK>>
+    * tag_id : UUID <<PK,FK>>
+}
+
+entity "anotacoes" as anotacoes {
     * id : UUID <<PK>>
-    * user_id : UUID <<FK>>
-    * month_id : UUID <<FK>>
-    * category_id : UUID <<FK>>
-    description : VARCHAR
-    amount : DECIMAL
+    * usuario_id : UUID <<FK>>
+    conteudo : TEXT
+    mes_ref : CHAR(7)
+    criado_em : TIMESTAMP
 }
 
-entity "deductions" as deductions {
-    * id : UUID <<PK>>
-    * user_id : UUID <<FK>>
-    * month_id : UUID <<FK>>
-    type : VARCHAR
-    calculated_amount : DECIMAL
-}
-
-entity "notes" as notes {
-    * id : UUID <<PK>>
-    * user_id : UUID <<FK>>
-    * month_id : UUID <<FK>>
-    content : TEXT
-}
-
-users ||--o{ months
-users ||--o{ income
-users ||--o{ expenses
-users ||--o{ categories
-months ||--o{ income
-months ||--o{ expenses
-months ||--o{ deductions
-categories ||--o{ expenses
+usuarios ||--o{ transacoes
+usuarios ||--o{ categorias
+usuarios ||--o{ tags
+usuarios ||--o{ anotacoes
+transacoes ||--o{ transacoes_categorias
+categorias ||--o{ transacoes_categorias
+transacoes ||--o{ transacoes_tags
+tags ||--o{ transacoes_tags
 @enduml
 ```
 
@@ -85,10 +84,12 @@ categories ||--o{ expenses
 
 ## Relacionamentos
 
-- **users → months**: Um usuário tem vários meses
-- **users → income**: Um usuário registra várias receitas
-- **months → income**: Um mês agrupa várias receitas
-- **categories → expenses**: Uma categoria tem várias despesas
+- **usuarios → transacoes**: Um usuário registra várias transações
+- **usuarios → categorias**: Um usuário cria várias categorias
+- **usuarios → tags**: Um usuário cria várias tags
+- **usuarios → anotacoes**: Um usuário pode registrar várias anotações por mês
+- **transacoes ↔ categorias**: Uma transação pode ter uma ou mais categorias
+- **transacoes ↔ tags**: Uma transação pode ter uma ou mais tags
 
 ---
 

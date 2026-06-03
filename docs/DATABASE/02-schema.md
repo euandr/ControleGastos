@@ -1,18 +1,23 @@
 # Database: Schema das Tabelas
 
+## Visão geral
+
+O modelo final é centrado em **transações**. Em vez de separar receita, despesa e investimento em tabelas diferentes, tudo passa por `transacoes`, com classificação por `tipo`, `natureza`, `necessidade`, categorias, tags e anotações mensais.
+
 ## Tabelas principais
 
-O projeto tem 7 tabelas:
+O projeto usa 7 tabelas:
 
-| Tabela | Descrição |
-|--------|-----------|
-| `users` | Usuários |
-| `months` | Meses de controle |
-| `income` | Receitas |
-| `expense_categories` | Categorias |
-| `expenses` | Despesas |
-| `deductions` | Dízimo/Investimento |
-| `notes` | Anotações |
+
+| Tabela                  | Descrição                                            |
+| ----------------------- | ------------------------------------------------------ |
+| `usuarios`              | Usuários do sistema                                   |
+| `transacoes`            | Núcleo financeiro: receitas, despesas e investimentos |
+| `categorias`            | Categorias criadas por usuário                        |
+| `transacoes_categorias` | Relação N:N entre transações e categorias          |
+| `tags`                  | Marcadores livres criados por usuário                 |
+| `transacoes_tags`       | Relação N:N entre transações e tags                |
+| `anotacoes`             | Anotações por usuário e mês de referência         |
 
 ---
 
@@ -21,146 +26,143 @@ O projeto tem 7 tabelas:
 Copie e execute no Supabase SQL Editor:
 
 ```sql
--- Tabela de usuários
-CREATE TABLE users (
+dCREATE TABLE usuarios (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    email VARCHAR(255) NOT NULL UNIQUE,
-    name VARCHAR(255) NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    is_active BOOLEAN DEFAULT TRUE
+    email VARCHAR(255) UNIQUE NOT NULL,
+    nome VARCHAR(255) NOT NULL,
+    senha_hash TEXT NOT NULL,
+    criado_em TIMESTAMP DEFAULT NOW()
 );
 
--- Tabela de meses
-CREATE TABLE months (
+CREATE TABLE transacoes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    month DATE NOT NULL,
-    total_income DECIMAL(10, 2) DEFAULT 0,
-    total_expenses DECIMAL(10, 2) DEFAULT 0,
-    total_deductions DECIMAL(10, 2) DEFAULT 0,
-    balance DECIMAL(10, 2) DEFAULT 0,
-    carry_over DECIMAL(10, 2) DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, month)
+    usuario_id UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    descricao TEXT NOT NULL,
+    valor DECIMAL(10,2) NOT NULL,
+    tipo VARCHAR(20) NOT NULL,
+    natureza VARCHAR(20),
+    necessidade BOOLEAN DEFAULT TRUE,
+    metodo_pagamento VARCHAR(20),
+    data DATE NOT NULL,
+    mes_ref CHAR(7) NOT NULL,
+    criado_em TIMESTAMP DEFAULT NOW()
 );
 
--- Tabela de receitas
-CREATE TABLE income (
+CREATE TABLE categorias (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    month_id UUID NOT NULL REFERENCES months(id) ON DELETE CASCADE,
-    description VARCHAR(255) NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL,
-    income_date DATE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    usuario_id UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    nome VARCHAR(100) NOT NULL,
+    criado_em TIMESTAMP DEFAULT NOW(),
+    UNIQUE(usuario_id, nome)
 );
 
--- Tabela de categorias
-CREATE TABLE expense_categories (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    name VARCHAR(100) NOT NULL,
-    color VARCHAR(7) DEFAULT '#3498db',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, name)
+CREATE TABLE transacoes_categorias (
+    transacao_id UUID REFERENCES transacoes(id) ON DELETE CASCADE,
+    categoria_id UUID REFERENCES categorias(id) ON DELETE CASCADE,
+    PRIMARY KEY (transacao_id, categoria_id)
 );
 
--- Tabela de despesas
-CREATE TABLE expenses (
+CREATE TABLE tags (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    month_id UUID NOT NULL REFERENCES months(id) ON DELETE CASCADE,
-    category_id UUID NOT NULL REFERENCES expense_categories(id),
-    description VARCHAR(255) NOT NULL,
-    amount DECIMAL(10, 2) NOT NULL,
-    expense_date DATE NOT NULL,
-    is_necessary BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    usuario_id UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    nome VARCHAR(50) NOT NULL,
+    UNIQUE(usuario_id, nome)
 );
 
--- Tabela de deduções
-CREATE TABLE deductions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    month_id UUID NOT NULL REFERENCES months(id) ON DELETE CASCADE,
-    type VARCHAR(50) NOT NULL,
-    percentage DECIMAL(5, 2),
-    fixed_amount DECIMAL(10, 2),
-    calculated_amount DECIMAL(10, 2) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE transacoes_tags (
+    transacao_id UUID REFERENCES transacoes(id) ON DELETE CASCADE,
+    tag_id UUID REFERENCES tags(id) ON DELETE CASCADE,
+    PRIMARY KEY (transacao_id, tag_id)
 );
 
--- Tabela de notas
-CREATE TABLE notes (
+CREATE TABLE anotacoes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    month_id UUID NOT NULL REFERENCES months(id) ON DELETE CASCADE,
-    content TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    usuario_id UUID REFERENCES usuarios(id) ON DELETE CASCADE,
+    conteudo TEXT NOT NULL,
+    mes_ref CHAR(7),
+    criado_em TIMESTAMP DEFAULT NOW()
 );
-
--- Criar índices
-CREATE INDEX idx_months_user_id ON months(user_id);
-CREATE INDEX idx_income_user_id ON income(user_id);
-CREATE INDEX idx_income_month_id ON income(month_id);
-CREATE INDEX idx_expenses_user_id ON expenses(user_id);
-CREATE INDEX idx_expenses_month_id ON expenses(month_id);
-CREATE INDEX idx_expenses_category_id ON expenses(category_id);
 ```
 
 ---
 
 ## Colunas principais
 
-### users
+### usuarios
+
 - `id` - UUID único
 - `email` - Email único
-- `name` - Nome do usuário
-- `password_hash` - Senha criptografada (bcrypt)
-- `created_at` - Data de criação
-- `is_active` - Se está ativo
+- `nome` - Nome do usuário
+- `senha_hash` - Senha criptografada
+- `criado_em` - Data de criação
 
-### months
-- `id` - UUID
-- `user_id` - Referência ao usuário
-- `month` - Data (2024-01-01 para janeiro)
-- `total_income` - Soma de receitas
-- `total_expenses` - Soma de despesas
-- `total_deductions` - Soma de deduções
-- `balance` - Saldo final
-- `carry_over` - Saldo que vem do mês anterior
+### transacoes
 
-### income
-- `id` - UUID
-- `user_id` - Referência
-- `month_id` - Referência ao mês
-- `description` - Ex: "Salário"
-- `amount` - Valor em reais
-- `income_date` - Data da receita
+- `id` - UUID único
+- `usuario_id` - Referência ao usuário dono da transação
+- `descricao` - Texto livre da transação
+- `valor` - Valor monetário
+- `tipo` - `receita`, `despesa` ou `investimento`
+- `natureza` - `fixo` ou `variavel`
+- `necessidade` - Indica se a despesa é necessária
+- `metodo_pagamento` - `debito`, `dinheiro`, `pix` ou `cartao`
+- `data` - Data real da transação
+- `mes_ref` - Referência mensal no formato `YYYY-MM`
+- `criado_em` - Data de criação
 
-### expenses
-- `id` - UUID
-- `user_id` - Referência
-- `month_id` - Referência
-- `category_id` - Qual categoria
-- `description` - Detalhe
-- `amount` - Valor
-- `is_necessary` - Necessária ou não
+### categorias
+
+- `id` - UUID único
+- `usuario_id` - Dono da categoria
+- `nome` - Nome visível da categoria
+- `cor` - Cor usada em gráficos
+
+### transacoes_categorias
+
+- `transacao_id` - Referência à transação
+- `categoria_id` - Referência à categoria
+
+### tags
+
+- `id` - UUID único
+- `usuario_id` - Dono da tag
+- `nome` - Nome da tag
+
+### transacoes_tags
+
+- `transacao_id` - Referência à transação
+- `tag_id` - Referência à tag
+
+### anotacoes
+
+- `id` - UUID único
+- `usuario_id` - Dono da anotação
+- `conteudo` - Texto livre
+- `mes_ref` - Mês de referência opcional
+- `criado_em` - Data de criação
 
 ---
 
 ## Relacionamentos
 
 ```
-users (1) → (N) months
-users (1) → (N) income
-users (1) → (N) expenses
-users (1) → (N) expense_categories
-months (1) → (N) income
-months (1) → (N) expenses
-categories (1) → (N) expenses
+usuarios (1) → (N) transacoes
+usuarios (1) → (N) categorias
+usuarios (1) → (N) tags
+usuarios (1) → (N) anotacoes
+transacoes (N) ↔ (N) categorias
+transacoes (N) ↔ (N) tags
 ```
+
+---
+
+## Regras de modelagem
+
+- `transacoes.tipo` concentra o domínio financeiro em três valores: receita, despesa e investimento.
+- `transacoes.natureza` ajuda a separar lançamentos fixos e variáveis.
+- `transacoes.necessidade` permite análises como despesas necessárias vs. não necessárias.
+- `mes_ref` substitui a tabela de meses; o mês é inferido diretamente da transação e da anotação.
+- `categorias` e `tags` são entidades por usuário, com unicidade garantida por nome dentro do mesmo `usuario_id`.
 
 ---
 

@@ -41,111 +41,90 @@ Supabase (PostgreSQL)
 │                         SUPABASE (PostgreSQL)               │
 └─────────────────────────────────────────────────────────────┘
 
-users (um usuário fixo no MVP, preparado para multi-user)
+usuarios
   ↓
-  └─→ months (período de controle)
-       ↓
-       ├─→ income (receitas)
-       │
-       ├─→ deductions (dízimo + investimento - configurados manualmente)
-       │
-       ├─→ expenses (despesas normais)
-       │   ├─→ expense_categories (categorias)
-       │   └─→ [is_necessary flag]
-       │
-       └─→ notes (anotações)
+  ├─→ transacoes
+  │    ├─→ transacoes_categorias → categorias
+  │    └─→ transacoes_tags → tags
+  │
+  └─→ anotacoes
 
 Fluxo:
-- Usuário fixo (sem login agora, preparado para multi-user depois)
-- Cada MÊS pode ter múltiplas RECEITAS, DEDUÇÕES, DESPESAS
-- Dízimo e investimento são CONFIGURADOS MANUALMENTE pelo usuário
-- Sistema calcula os valores com base na configuração
-- Carry-over é automático
+- O núcleo do sistema é `transacoes`
+- O tipo da transação define se ela é receita, despesa ou investimento
+- `natureza` e `necessidade` refinam a análise financeira
+- Categorias e tags são opcionais e podem ser múltiplas por transação
+- O mês é representado por `mes_ref` (`YYYY-MM`), sem tabela de meses
 ```
 
 ### Tabelas Principais
 
-#### `users` (Usuários - preparado para multi-user)
+#### `usuarios`
 
 ```sql
 - id (UUID, PK)
 - email (String, unique)
-- created_at (Timestamp)
-
-MVP: Um usuário fixo com email padrão (ex: "user@local")
-Futuro: Múltiplos usuários com autenticação
+- nome (String)
+- senha_hash (Text)
+- criado_em (Timestamp)
 ```
 
-#### `months` (Períodos de controle)
+#### `transacoes` (núcleo do sistema)
 
 ```sql
 - id (UUID, PK)
-- user_id (UUID, FK → users)
-- month (Date) - primeiro dia do mês (ex: 2024-01-01)
-- created_at (Timestamp)
+- usuario_id (UUID, FK → usuarios)
+- descricao (Text)
+- valor (Decimal)
+- tipo (String: 'receita', 'despesa', 'investimento')
+- natureza (String: 'fixo', 'variavel')
+- necessidade (Boolean)
+- metodo_pagamento (String: 'debito', 'dinheiro', 'pix', 'cartao')
+- data (Date)
+- mes_ref (Char(7), ex: '2026-01')
+- criado_em (Timestamp)
 ```
 
-MVP: user_id é sempre o mesmo (usuário fixo)  
-Futuro: Múltiplos user_ids conforme usuários fazem login
-
-#### `income` (Receitas)
+#### `categorias`
 
 ```sql
 - id (UUID, PK)
-- user_id (UUID, FK → users)
-- month_id (UUID, FK → months)
-- description (String) - ex: "Salário", "Freelance"
-- amount (Decimal)
-- is_carried_over (Boolean) - TRUE se é "restante do mês passado"
-- created_at (Timestamp)
+- usuario_id (UUID, FK → usuarios)
+- nome (String)
+- cor (String, ex: '#3498db')
+- criado_em (Timestamp)
 ```
 
-#### `expense_categories` (Categorias de despesa)
+#### `transacoes_categorias` (N:N)
+
+```sql
+- transacao_id (UUID, FK → transacoes)
+- categoria_id (UUID, FK → categorias)
+```
+
+#### `tags`
 
 ```sql
 - id (UUID, PK)
-- user_id (UUID, FK → users)
-- name (String) - ex: "Alimentação", "Transporte"
-- color (String) - ex: "#FF5733" para gráficos
-- created_at (Timestamp)
+- usuario_id (UUID, FK → usuarios)
+- nome (String)
 ```
 
-#### `expenses` (Despesas)
+#### `transacoes_tags` (N:N)
+
+```sql
+- transacao_id (UUID, FK → transacoes)
+- tag_id (UUID, FK → tags)
+```
+
+#### `anotacoes`
 
 ```sql
 - id (UUID, PK)
-- user_id (UUID, FK → users)
-- month_id (UUID, FK → months)
-- category_id (UUID, FK → expense_categories)
-- description (String)
-- amount (Decimal)
-- is_necessary (Boolean) - TRUE: necessária, FALSE: não-necessária
-- created_at (Timestamp)
-```
-
-#### `deductions` (Deduções: dízimo + investimento - configuradas manualmente)
-
-```sql
-- id (UUID, PK)
-- user_id (UUID, FK → users)
-- month_id (UUID, FK → months)
-- type (String enum: 'tithe', 'investment') - dízimo ou investimento
-- description (String) - ex: "Dízimo (10%)" ou "Investimento (20%)"
-- percentage (Decimal) - porcentagem configurada pelo usuário
-- amount (Decimal) - valor final calculado (receita × porcentagem)
-- created_at (Timestamp)
-```
-
-**IMPORTANTE**: Dízimo e investimento são **CONFIGURADOS MANUALMENTE** pelo usuário ao criar um mês ou editar deduções. O sistema calcula o valor (amount) baseado na porcentagem e receitas.
-
-#### `notes` (Anotações por mês)
-
-```sql
-- id (UUID, PK)
-- user_id (UUID, FK → users)
-- month_id (UUID, FK → months)
-- content (Text)
-- updated_at (Timestamp)
+- usuario_id (UUID, FK → usuarios)
+- conteudo (Text)
+- mes_ref (Char(7))
+- criado_em (Timestamp)
 ```
 
 ---
@@ -164,37 +143,35 @@ ControleGastos/
 │   │   ├── models/                 # Modelos SQLAlchemy
 │   │   │   ├── __init__.py
 │   │   │   ├── user.py
-│   │   │   ├── month.py
-│   │   │   ├── income.py
-│   │   │   ├── expense.py
+│   │   │   ├── transaction.py
 │   │   │   ├── category.py
-│   │   │   ├── deduction.py
+│   │   │   ├── tag.py
 │   │   │   └── note.py
 │   │   │
 │   │   ├── schemas/                # Schemas Pydantic (validação/serialização)
 │   │   │   ├── __init__.py
 │   │   │   ├── user.py
-│   │   │   ├── income.py
-│   │   │   ├── expense.py
+│   │   │   ├── transaction.py
 │   │   │   ├── category.py
-│   │   │   └── month.py
+│   │   │   ├── tag.py
+│   │   │   └── note.py
 │   │   │
 │   │   ├── routes/                 # Endpoints organizados por domínio
 │   │   │   ├── __init__.py
-│   │   │   ├── income.py
-│   │   │   ├── expenses.py
+│   │   │   ├── transacoes.py
 │   │   │   ├── categories.py
-│   │   │   ├── fixed_entries.py
-│   │   │   ├── months.py
+│   │   │   ├── tags.py
+│   │   │   ├── anotacoes.py
 │   │   │   ├── analytics.py        # Endpoints de análise/gráficos
-│   │   │   └── notes.py
 │   │   │
 │   │   ├── services/               # Lógica de negócio
 │   │   │   ├── __init__.py
-│   │   │   ├── income_service.py
-│   │   │   ├── expense_service.py
+│   │   │   ├── transacoes_service.py
+│   │   │   ├── categories_service.py
+│   │   │   ├── tags_service.py
+│   │   │   ├── notes_service.py
 │   │   │   ├── analytics_service.py
-│   │   │   └── calculations.py     # Cálculos: investimento, dízimo, restante
+│   │   │   └── calculations.py     # Cálculos: resumo mensal e agregações
 │   │   │
 │   │   ├── database.py             # Configuração do BD (Supabase)
 │   │   └── utils.py                # Funções auxiliares
@@ -222,26 +199,27 @@ ControleGastos/
 │   │   │
 │   │   ├── pages/
 │   │   │   ├── Dashboard.jsx       # Resumo/overview do mês
-│   │   │   ├── IncomeEntry.jsx     # Página de entrada de receitas
-│   │   │   ├── ExpenseEntry.jsx    # Página de entrada de despesas
+│   │   │   ├── Transactions.jsx    # Página de transações
 │   │   │   ├── Categories.jsx      # Gerenciamento de categorias
+│   │   │   ├── Tags.jsx            # Gerenciamento de tags
 │   │   │   ├── Analysis.jsx        # Gráficos e análises de meses
-│   │   │   ├── Settings.jsx        # Configurações (% investimento, etc)
-│   │   │   └── Notes.jsx           # Anotações do mês
+│   │   │   ├── Notes.jsx           # Anotações do mês
+│   │   │   └── Settings.jsx        # Configurações gerais
 │   │   │
 │   │   ├── services/
 │   │   │   ├── api.js              # Cliente HTTP (Axios)
-│   │   │   ├── incomeService.js
-│   │   │   ├── expenseService.js
+│   │   │   ├── transactionsService.js
+│   │   │   ├── categoriesService.js
+│   │   │   ├── tagsService.js
+│   │   │   ├── notesService.js
 │   │   │   └── analyticsService.js
 │   │   │
 │   │   ├── hooks/
-│   │   │   ├── useMonth.js         # Hook para mês atual
-│   │   │   ├── useIncomes.js
-│   │   │   └── useExpenses.js
+│   │   │   ├── useMesRef.js        # Hook para período atual
+│   │   │   └── useTransactions.js
 │   │   │
 │   │   ├── context/
-│   │   │   └── MonthContext.jsx    # Contexto para mês selecionado
+│   │   │   └── TransactionContext.jsx    # Contexto para período/filtros
 │   │   │
 │   │   ├── App.jsx
 │   │   ├── App.css
@@ -262,76 +240,50 @@ ControleGastos/
 
 ## 4. API ENDPOINTS (FastAPI)
 
-### Income Routes
+### Transaction Routes
 
-- `POST /api/income` - Criar receita
-- `GET /api/income?month=2024-01` - Listar receitas do mês
-- `PUT /api/income/{id}` - Editar receita
-- `DELETE /api/income/{id}` - Deletar receita
+- `POST /api/transacoes` - Criar transação
+- `GET /api/transacoes?mes_ref=2026-01` - Listar transações do mês
+- `PUT /api/transacoes/{id}` - Editar transação
+- `DELETE /api/transacoes/{id}` - Deletar transação
 
-### Expense Routes
+### Classification Routes
 
-- `POST /api/expenses` - Criar despesa
-- `GET /api/expenses?month=2024-01` - Listar despesas do mês
-- `PUT /api/expenses/{id}` - Editar despesa
-- `DELETE /api/expenses/{id}` - Deletar despesa
-
-### Category Routes
-
-- `POST /api/categories` - Criar categoria
-- `GET /api/categories` - Listar todas as categorias do usuário
-- `PUT /api/categories/{id}` - Editar categoria
-- `DELETE /api/categories/{id}` - Deletar categoria
-
-### Deductions Routes (Dízimo + Investimento - configurados manualmente)
-
-- `POST /api/deductions` - Criar dedução (dízimo ou investimento)
-- `GET /api/deductions?month=2024-01` - Listar deduções do mês
-- `PUT /api/deductions/{id}` - Editar dedução (ajustar porcentagem ou valor)
-- `DELETE /api/deductions/{id}` - Deletar dedução
-
-### Month Routes
-
-- `GET /api/months` - Listar todos os meses com dados
-- `GET /api/months/{month}/summary` - Resumo do mês (totais, cálculos)
-
-### Analytics Routes
-
-- `GET /api/analytics/month/{month}` - Dados para gráfico pizza (necessárias vs não-necessárias)
-- `GET /api/analytics/comparison?month1=2024-01&month2=2024-02` - Comparação entre meses
-- `GET /api/analytics/expense-breakdown` - Breakdown por categoria
+- `POST /api/categorias` - Criar categoria
+- `GET /api/categorias` - Listar categorias do usuário
+- `POST /api/tags` - Criar tag
+- `GET /api/tags` - Listar tags do usuário
 
 ### Notes Routes
 
-- `POST /api/notes` - Criar/atualizar anotações do mês
-- `GET /api/notes?month=2024-01` - Obter anotações do mês
+- `POST /api/anotacoes` - Criar ou atualizar anotação
+- `GET /api/anotacoes?mes_ref=2026-01` - Obter anotação do mês
 
-### Settings Routes
+### Summary Routes
 
-- `GET /api/settings/user` - Obter configurações do usuário
-- `PUT /api/settings/user` - Atualizar configurações (para templates futuros)
+- `GET /api/resumo?mes_ref=2026-01` - Resumo mensal consolidado
+- `GET /api/analytics/por-tipo?mes_ref=2026-01` - Dados agregados por tipo
+- `GET /api/analytics/por-categoria?mes_ref=2026-01` - Dados agregados por categoria
+- `GET /api/analytics/por-tag?mes_ref=2026-01` - Dados agregados por tag
 
 ---
 
 ## 5. LÓGICA DE CÁLCULOS
 
-### Fluxo de Cálculo (por mês)
+### Fluxo de Cálculo (por `mes_ref`)
 
-1. **Receitas Totais** = Soma de todas as receitas normais (exceto carry-over)
-2. **Dízimo (Dedução Manual)** = Configurado pelo usuário (geralmente 10% das receitas)
-3. **Investimento (Dedução Manual)** = Configurado pelo usuário - pode ser:
-   - Uma **porcentagem** das receitas (ex: 20%)
-   - Um **valor fixo** (ex: R$ 500)
-   - Uma **combinação** de ambos (porcentagem + valor fixo adicional)
-4. **Despesas Totais** = Soma de todas as despesas normais
-5. **Restante Disponível** = (Receitas Totais - Dízimo - Investimento - Despesas Totais)
-6. **Próximo Mês - Carry-Over** = Restante Disponível é criado automaticamente como receita com `is_carried_over = true`
+1. **Receitas Totais** = Soma de `transacoes.valor` onde `tipo = 'receita'`
+2. **Despesas Totais** = Soma de `transacoes.valor` onde `tipo = 'despesa'`
+3. **Investimentos Totais** = Soma de `transacoes.valor` onde `tipo = 'investimento'`
+4. **Saldo Final** = Receitas Totais - Despesas Totais - Investimentos Totais
+5. **Despesas Necessárias** = Soma das despesas com `necessidade = true`
+6. **Despesas Variáveis/Não Necessárias** = Soma das despesas com `necessidade = false`
 
 ### Gráfico Pizza
 
-- **Necessárias**: Soma das despesas com `is_necessary = true`
-- **Não-Necessárias**: Soma das despesas com `is_necessary = false`
-- **Percentual**: (Categoria / Total Despesas) × 100
+- **Necessárias**: Soma das despesas com `necessidade = true`
+- **Não-Necessárias**: Soma das despesas com `necessidade = false`
+- **Percentual**: (Grupo / Total de despesas) × 100
 
 ---
 
@@ -341,25 +293,23 @@ ControleGastos/
 
 - [x] Criar estrutura de pastas
 - [ ] Setup Backend (FastAPI + BD Supabase)
-- [ ] Criar models SQLAlchemy (incluindo users)
+- [ ] Criar models SQLAlchemy (incluindo usuarios)
 - [ ] Criar schemas Pydantic
-- [ ] Implementar CRUD de Receitas
-- [ ] Implementar CRUD de Despesas
+- [ ] Implementar CRUD de Transações
 - [ ] Implementar CRUD de Categorias
-- [ ] Implementar CRUD de Deduções (dízimo + investimento configurados manualmente)
-- [ ] Implementar lógica de cálculos de deduções
-- [ ] Implementar carry-over automático
-- [ ] Endpoint de resumo do mês
+- [ ] Implementar CRUD de Tags
+- [ ] Implementar CRUD de Anotações
+- [ ] Implementar lógica de resumo por `mes_ref`
+- [ ] Endpoint de dashboard/resumo mensal
 - [ ] Setup Frontend (React + Vite)
-- [ ] Página Dashboard (resumo mês)
-- [ ] Página Entrada de Receitas
-- [ ] Página Entrada de Despesas
+- [ ] Página Dashboard (resumo mensal)
+- [ ] Página de entrada/edição de transações
 - [ ] Página Gerenciar Categorias
-- [ ] Página Configurações (deduções manual)
+- [ ] Página Gerenciar Tags
+- [ ] Página Anotações
 - [ ] Gráfico Pizza (necessárias vs não-necessárias)
 - [ ] Gráfico Barras por Categoria
-- [ ] Gráfico Comparação (receitas vs despesas vs investimento vs restante)
-- [ ] Anotações do mês
+- [ ] Gráfico Comparação (receitas vs despesas vs investimentos)
 
 ### Futuro (Priority 2+)
 
@@ -389,12 +339,11 @@ ControleGastos/
 
 ### Fase 2: Backend CRUD
 
-1. Implementar routes/services para Income
-2. Implementar routes/services para Expenses
-3. Implementar routes/services para Categories
-4. Implementar routes/services para Deductions (configuradas manualmente)
-5. Implementar lógica de cálculos
-6. Implementar carry-over automático
+1. Implementar routes/services para Transações
+2. Implementar routes/services para Categorias
+3. Implementar routes/services para Tags
+4. Implementar routes/services para Anotações
+5. Implementar lógica de resumo por `mes_ref`
 7. Testar com Postman/Insomnia
 
 ### Fase 3: Frontend
@@ -418,58 +367,41 @@ ControleGastos/
 
 ### Estrutura Multi-User (Preparada desde agora)
 
-- Tabela `users` existe desde o MVP (mas com um usuário fixo)
-- Todos os dados têm `user_id` (mas sempre o mesmo)
-- **MVP**: Usuário fixo, sem login
-- **Futuro**: Implementar autenticação com Supabase Auth é trivial (apenas adicionar login)
+- Tabela `usuarios` existe desde o MVP
+- Todos os dados principais têm `usuario_id`
+- **MVP**: autenticação pode ser adiada, mas o modelo já está pronto para múltiplos usuários
+- **Futuro**: integrar login com Supabase Auth ou JWT sem mudar o esquema central
 
-### Carry-Over Automático
+### Transações como Núcleo
 
-- **Fluxo**: Ao fim do mês, sistema calcula restante
-- **Ação**: Cria automaticamente uma receita no mês seguinte com `is_carried_over = true`
-- **Regra**: Essa receita NOT recebe cálculos de dízimo/investimento
-- **Implementação**: Pode ser via endpoint automático ou job agendado
-
-### Dízimo e Investimento (Deduções Manuais)
-
-- **Dízimo**: Configurado manualmente pelo usuário (geralmente 10%, mas pode variar)
-- **Investimento**: Configurado manualmente com opções flexíveis:
-  - **Porcentagem** das receitas (ex: 20%)
-  - **Valor fixo** (ex: R$ 500)
-  - **Ambos** (porcentagem + valor fixo adicional)
-- **Cálculo**: O sistema calcula o `amount` final baseado na configuração do usuário
-- **Armazenamento**: Ambas em `deductions` com `percentage` e `amount`
-- **CRUD**: POST (criar), GET (listar), PUT (editar), DELETE (remover)
-- **Dashboard**: Mostradas separadas de despesas normais
-
-### Carry-Over do Restante
-
-- No final do mês, calcular restante disponível
-- No início do próximo mês, criar automaticamente income com `is_carried_over = true`
-- Este valor não recebe % de investimento nem dízimo
-- Implementação automática via backend
+- Receita, despesa e investimento usam a mesma tabela
+- `tipo` decide a natureza financeira do lançamento
+- `necessidade` permite separar despesas essenciais das opcionais
+- `natureza` permite distinguir fluxo fixo e variável
+- Tags e categorias são complementares e podem coexistir na mesma transação
 
 ### Gráficos MVP
 
-- **Gráfico Pizza**: Despesas necessárias vs não-necessárias
+- **Gráfico Pizza**: Transações necessárias vs não necessárias
 - **Gráfico Barras**: Gastos por categoria
-- **Gráfico Comparação**: Receitas vs Despesas vs Investimento vs Restante
-  - **Tipo recomendado**: Gráfico de Barras Agrupadas (grupo por tipo de dado)
+- **Gráfico Comparação**: Receitas vs Despesas vs Investimentos vs Saldo
+  - **Tipo recomendado**: Gráfico de Barras Agrupadas
   - **Alternativa**: Gráfico de Área ou Coluna
 - **Implementação**: Recharts para React
 
-### Categorias
+### Categorias e Tags
 
-- User pode criar/editar/deletar categorias
-- Cores associadas para visualização em gráficos
-- Exemplo padrão: "Alimentação", "Transporte", "Moradia", "Lazer", "Saúde"
+- O usuário pode criar, editar e remover categorias
+- O usuário pode criar, editar e remover tags
+- Cores associadas às categorias ajudam na visualização dos gráficos
+- Tags servem para filtros livres e organização adicional
 
 ### Documentação
 
 - **Foco**: Boa documentação é prioridade (você está aprendendo)
 - **Padrão**: Docstrings em todas as funções e classes
 - **README**: Instrução de setup do BD, variáveis de ambiente, como rodar localmente
-- **Comentários**: Explicar lógica complexa, especialmente cálculos
+- **Comentários**: Explicar lógica complexa, especialmente agregações por `mes_ref`
 
 ---
 

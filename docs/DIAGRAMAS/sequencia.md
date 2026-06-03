@@ -1,40 +1,37 @@
 # Diagramas: Sequência de Operações
 
-## Diagrama 1: Criar Receita
+## Diagrama 1: Criar Transação
 
 ```
-Browser → Backend: POST /api/income
-Backend → Database: INSERT income
+Browser → Backend: POST /api/transacoes
+Backend → Database: INSERT transacoes
 Database → Backend: ✓ Sucesso
-Backend → Database: UPDATE months (recalcula totais)
+Backend → Database: INSERT transacoes_categorias / transacoes_tags (se houver)
 Backend → Browser: 201 Created (dados atualizados)
-Browser → Browser: Atualiza gráficos
+Browser → Browser: Atualiza dashboard e gráficos
 ```
 
-## Diagrama 2: Calcular Saldo
+## Diagrama 2: Calcular Resumo Mensal
 
 ```
-Backend: Busca todas as receitas do mês
-Backend: Busca todas as despesas do mês
-Backend: Busca todas as deduções do mês
-Backend → Database: UPDATE months
-  total_income = SUM(income)
-  total_expenses = SUM(expenses)
-  total_deductions = SUM(deductions)
-  balance = total_income - total_expenses - total_deductions
-Database: ✓ Atualizado
+Backend: Busca transacoes por usuario_id e mes_ref
+Backend: Agrupa por tipo, necessidade, natureza, categoria e tags
+Backend → Database: SELECT SUM(valor)
+  receita = transacoes.tipo = 'receita'
+  despesa = transacoes.tipo = 'despesa'
+  investimento = transacoes.tipo = 'investimento'
+  saldo = receita - despesa - investimento
+Database: ✓ Resumo calculado
 ```
 
 ## Diagrama 3: Visualizar Gráficos
 
 ```
-Browser: GET /api/analytics/?month=2024-01
-Backend → Database: SELECT expenses, SUM por categoria
-Database → Backend: Dados agrupados
-Backend → Database: SELECT receitas vs despesas
-Database → Backend: Resumo financeiro
+Browser: GET /api/analytics/?mes_ref=2026-01
+Backend → Database: SELECT transacoes filtradas por mes_ref
+Database → Backend: Dados agrupados por categoria, tag e necessidade
 Backend → Browser: JSON com dados dos gráficos
-Browser: Renderiza 3 gráficos com Recharts
+Browser: Renderiza gráficos com Recharts
 ```
 
 ---
@@ -42,8 +39,12 @@ Browser: Renderiza 3 gráficos com Recharts
 ## Fórmulas
 
 ```
-balance = total_income - total_expenses - total_deductions
-liquid = balance - carry_over_anterior
+receitas = SUM(valor) WHERE tipo = 'receita'
+despesas = SUM(valor) WHERE tipo = 'despesa'
+investimentos = SUM(valor) WHERE tipo = 'investimento'
+saldo = receitas - despesas - investimentos
+despesas_necessarias = SUM(valor) WHERE tipo = 'despesa' AND necessidade = true
+despesas_nao_necessarias = SUM(valor) WHERE tipo = 'despesa' AND necessidade = false
 ```
 
 ---
