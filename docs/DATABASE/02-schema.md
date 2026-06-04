@@ -4,6 +4,8 @@
 
 O modelo final é centrado em **transações**. Em vez de separar receita, despesa e investimento em tabelas diferentes, tudo passa por `transacoes`, com classificação por `tipo`, `natureza`, `necessidade`, categorias, tags e anotações mensais.
 
+O banco físico é **PostgreSQL**, mas ele será administrado pela plataforma **Supabase**, que também pode fornecer autenticação, storage e outros serviços do backend.
+
 ## Tabelas principais
 
 O projeto usa 7 tabelas:
@@ -26,13 +28,7 @@ O projeto usa 7 tabelas:
 Copie e execute no Supabase SQL Editor:
 
 ```sql
-dCREATE TABLE usuarios (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    email VARCHAR(255) UNIQUE NOT NULL,
-    nome VARCHAR(255) NOT NULL,
-    senha_hash TEXT NOT NULL,
-    criado_em TIMESTAMP DEFAULT NOW()
-);
+as  
 
 CREATE TABLE transacoes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

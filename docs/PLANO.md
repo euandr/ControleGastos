@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Sistema web de controle de gastos pessoais que replica e expande as funcionalidades de uma planilha Excel. Frontend em React, Backend em FastAPI (Python) e Banco de dados Supabase (PostgreSQL).
+Sistema web de controle de gastos pessoais que replica e expande as funcionalidades de uma planilha Excel. Frontend em React, Backend em FastAPI (Python) e Banco de dados PostgreSQL gerenciado via Supabase.
 
 **Objetivo MVP**: Replicar 100% das funcionalidades da planilha, com estrutura preparada para multi-user no futuro.
 
@@ -17,14 +17,15 @@ Cliente (Browser/React)
   ↓↑ (HTTP/CORS)
 FastAPI Backend (Python)
   ↓↑ (SQL)
-Supabase (PostgreSQL)
+Supabase (PostgreSQL gerenciado)
 ```
 
 ### Stack Recomendada
 
 - **Frontend**: React + TypeScript + Vite + Axios/Fetch
 - **Backend**: Python 3.11 + FastAPI + SQLAlchemy + Pydantic
-- **Banco de Dados**: Supabase (PostgreSQL gerenciado + Autenticação incluída)
+- **Banco de Dados**: PostgreSQL gerenciado via Supabase
+- **Serviços nativos da plataforma**: autenticação, storage, realtime e APIs prontas
 - **Gráficos**: Recharts (React) - recomendado para React, mas Chart.js também é viável
 - **Deployment**: Vercel (Frontend) + Railway/Render (Backend) - sujeito a mudanças conforme aprendizado
 
@@ -38,7 +39,7 @@ Supabase (PostgreSQL)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                         SUPABASE (PostgreSQL)               │
+│                 SUPABASE (PostgreSQL gerenciado)            │
 └─────────────────────────────────────────────────────────────┘
 
 usuarios

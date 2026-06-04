@@ -13,7 +13,7 @@ Neste documento, você aprenderá a:
 
 ## O que é Supabase?
 
-**Supabase** é uma plataforma de backend open-source que fornece um banco de dados PostgreSQL gerenciado na nuvem. Ele oferece:
+**Supabase** é uma plataforma de backend open-source que fornece um banco de dados PostgreSQL gerenciado na nuvem, além de serviços prontos para acelerar o projeto. Ele oferece:
 
 - **PostgreSQL** - banco de dados relacional confiável
 - **API REST** - acesso aos dados via HTTP
@@ -26,6 +26,7 @@ Para o projeto **ControleGastos**, usamos Supabase porque:
 - Oferece **tier gratuito** generoso
 - Suporta **PostgreSQL** (melhor para relacionamentos)
 - Integra bem com **FastAPI** (nosso backend)
+- Já entrega peças que o projeto pode usar sem criar tudo do zero, como autenticação, storage e recursos de tempo real
 
 ---
 

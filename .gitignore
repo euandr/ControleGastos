@@ -1,7 +1,9 @@
 
 backend/venv
 backend/.env
-
-
 backend/venv/
 
+backend/app/__pycache__/
+backend/app/routes/__pycache__/
+.vscode/
+.vscode

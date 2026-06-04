@@ -6,7 +6,7 @@ Bem-vindo ao ControleGastos!
 
 **Frontend**: React + Vite  
 **Backend**: FastAPI + Python 3.11  
-**Database**: Supabase (PostgreSQL)
+**Database**: PostgreSQL gerenciado via Supabase
 
 ## Roteiro
 
