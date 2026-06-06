@@ -17,9 +17,9 @@ ControleGastos, um sistema full-stack que replica e expande as funcionalidades d
 Projeto de aprendizado. Livre para modificar.
 
 # nota
-mais informações sobre backend na path /backend
+mais informações sobre backend em /backend
 
-mais informações sobre frontend na path /frontend
+mais informações sobre frontend em /frontend
 
 
 
