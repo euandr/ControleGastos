@@ -1,10 +1,25 @@
+
+# import os
+# from supabase import create_client, Client
+# from dotenv import load_dotenv
+
+# load_dotenv()
+
+
+# url: str = os.environ.get("SUPABASE_URL")
+# key: str = os.environ.get("SUPABASE_KEY")
+# supabase: Client = create_client(url, key)
+
 import os
-from supabase import create_client, Client
+from pathlib import Path
+
 from dotenv import load_dotenv
+from supabase import create_client, Client
 
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")
 
-supabase: Client = create_client(
-    os.environ["SUPABASE_URL"],
-    os.environ["SUPABASE_PUBLISHABLE_KEY"]
-)
+url = os.environ.get("SUPABASE_URL")
+key = os.environ.get("SUPABASE_KEY")
+
+supabase: Client = create_client(url, key)

@@ -10,9 +10,8 @@ O banco físico é **PostgreSQL**, mas ele será administrado pela plataforma **
 
 O projeto usa 7 tabelas:
 
-
-| Tabela                  | Descrição                                            |
-| ----------------------- | ------------------------------------------------------ |
+| Tabela                    | Descrição                                            |
+| ------------------------- | ------------------------------------------------------ |
 | `usuarios`              | Usuários do sistema                                   |
 | `transacoes`            | Núcleo financeiro: receitas, despesas e investimentos |
 | `categorias`            | Categorias criadas por usuário                        |
