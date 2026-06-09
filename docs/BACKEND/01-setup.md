@@ -3,6 +3,7 @@
 ## O que você vai fazer
 
 Neste documento:
+
 - Criar pasta `backend/`
 - Instalar FastAPI e dependências
 - Criar arquivo `main.py`
@@ -95,6 +96,7 @@ uvicorn main:app --reload
 ```
 
 **Saída esperada:**
+
 ```
 Uvicorn running on http://127.0.0.1:8000
 ```

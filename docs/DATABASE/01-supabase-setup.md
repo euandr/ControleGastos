@@ -3,6 +3,7 @@
 ## O que você vai fazer
 
 Neste documento, você aprenderá a:
+
 - Entender o que é Supabase
 - Criar uma conta e projeto
 - Obter as credenciais necessárias
@@ -22,6 +23,7 @@ Neste documento, você aprenderá a:
 - **Storage** - armazenamento de arquivos
 
 Para o projeto **ControleGastos**, usamos Supabase porque:
+
 - É **fácil de configurar**
 - Oferece **tier gratuito** generoso
 - Suporta **PostgreSQL** (melhor para relacionamentos)
@@ -59,12 +61,14 @@ Para o projeto **ControleGastos**, usamos Supabase porque:
 Na sidebar, vá para **Settings** → **Database**
 
 **Copie:**
+
 - **Host**: `db.xxxx.supabase.co`
 - **Port**: `5432`
 - **User**: `postgres`
 - **Password**: Aquela que você definiu
 
 **Ou copie a connection string completa:**
+
 ```
 postgresql://postgres:SENHA@db.xxxx.supabase.co:5432/postgres
 ```

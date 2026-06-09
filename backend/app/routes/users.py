@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.schemas.users import UsersCreate
-from app.services.users import InsertUser, SelectUser
+from schemas.users import UsersCreate, UserLogin
+from services.users import InsertUser, Loging
 
 
 router = APIRouter(
@@ -24,3 +24,7 @@ def CreateUsers(user: UsersCreate):
         }
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"erro ao criar usuário: {exc}")
+
+@router.post("/login")
+def Login(user: UserLogin):
+    return Loging(user.email, user.senha)

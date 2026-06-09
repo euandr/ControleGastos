@@ -35,5 +35,6 @@ def criar_token_confirmacao_email(user_id: str):
     token = jwt.encode(payload, SECRET_KEY_ACESSO, algorithm="HS256")
     return token
 
-def verificar_email():
-    return  
+def Logar_usuario(user_id: str):
+    token_acesso = criar_token_acesso(user_id)
+    return token_acesso
