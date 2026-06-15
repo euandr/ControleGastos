@@ -1,30 +1,36 @@
 from fastapi import APIRouter, HTTPException
 from schemas.users import UsersCreate, UserLogin
 from services.users import InsertUser, Loging
-
+from services.auth import criar_token_acesso, verificar_token
 
 router = APIRouter(
     prefix="/usuarios",
     tags=["Usuarios"]
 )
 
-@router.get("/")
-def listUsers(id: str | None = None):
-    if id is not None:
-        return {"id": id}
-    return SelectUser()
 
-@router.post("/", status_code=201)
+
+@router.post("/create_user", status_code=201)
 def CreateUsers(user: UsersCreate):
     try:
-        add = InsertUser(user.nome, user.email, user.senha)
+        add = InsertUser(user.nome, user.email, user.senha).data
         return {
             "mensagem": "Usuário criado",
             "data": add,
         }
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"erro ao criar usuário: {exc}")
+    except Exception:
+        raise HTTPException(status_code=500, detail=f"erro ao criar usuário")
 
 @router.post("/login")
 def Login(user: UserLogin):
-    return Loging(user.email, user.senha)
+    usuario = Loging(user.email, user.senha)
+
+    if not usuario:
+        raise HTTPException(status_code=401, detail="Credenciais inválidas")
+
+    token = criar_token_acesso(usuario["id"])
+
+    return {
+        "message": "Login bem-sucedido",
+        "access_token": token
+    }

@@ -3,6 +3,8 @@ from pwdlib import PasswordHash
 import jwt
 from datetime import datetime, timedelta
 import os
+from jose import jwt, JWTError, ExpiredSignatureError
+
 
 
 SECRET_KEY_ACESSO = os.getenv("TOKEN_ACESSO_SECRET_KEY_")
@@ -11,7 +13,6 @@ password_hash = PasswordHash.recommended()
 
 
 def Gerar_hash_senha(senha: str):
-    
     return password_hash.hash(senha)
 
 def Verificar_senha(senha: str, senha_hash: str):
@@ -21,20 +22,36 @@ def Verificar_senha(senha: str, senha_hash: str):
 def criar_token_acesso(user_id: str):
     payload = {
         "sub": user_id,
-        "exp": datetime.utcnow() + timedelta(minutes=15)
+        "exp": datetime.utcnow() + timedelta(hours=24)
     }
-    token = jwt.encode(payload, SECRET_KEY_ACESSO, algorithm="HS256")
+    # header e signature são gerados automaticamente pelo jwt.encode
+    token = jwt.encode(
+        payload,
+        SECRET_KEY_ACESSO, 
+        algorithm="HS256")
     return token
 
+def verificar_token(token: str):
 
-def criar_token_confirmacao_email(user_id: str):
-    payload = {
-        "sub": user_id,
-        "exp": datetime.utcnow() + timedelta(minutes=15)
-    }
-    token = jwt.encode(payload, SECRET_KEY_ACESSO, algorithm="HS256")
-    return token
+    try:
+        payload = jwt.decode(
+            token,
+            SECRET_KEY_ACESSO,
+            algorithms=["HS256"]
+        )
 
-def Logar_usuario(user_id: str):
-    token_acesso = criar_token_acesso(user_id)
-    return token_acesso
+        return payload["sub"]
+
+    except ExpiredSignatureError:
+        return None
+
+    except JWTError:
+        return None
+# def criar_token_confirmacao_email(user_id: str):
+#     payload = {
+#         "sub": user_id,
+#         "exp": datetime.utcnow() + timedelta(minutes=15)
+#     }
+#     token = jwt.encode(payload, SECRET_KEY_ACESSO, algorithm="HS256")
+#     return token
+
