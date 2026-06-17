@@ -22,15 +22,16 @@ def CreateUsers(user: UsersCreate):
         raise HTTPException(status_code=500, detail=f"erro ao criar usuário")
 
 @router.post("/login")
-def Login(user: UserLogin):
+def login_for_acess_token(user: UserLogin):
     usuario = Loging(user.email, user.senha)
 
     if not usuario:
         raise HTTPException(status_code=401, detail="Credenciais inválidas")
 
     token = criar_token_acesso(usuario["id"])
-
     return {
         "message": "Login bem-sucedido",
         "access_token": token
     }
+
+# @router.put   ("/esqueci_senha")

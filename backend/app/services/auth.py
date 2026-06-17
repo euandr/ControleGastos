@@ -47,6 +47,11 @@ def verificar_token(token: str):
 
     except JWTError:
         return None
+    
+def usuario_logado(token: str):
+    pass
+
+    
 # def criar_token_confirmacao_email(user_id: str):
 #     payload = {
 #         "sub": user_id,

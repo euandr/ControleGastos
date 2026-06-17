@@ -34,7 +34,6 @@ def Loging(email: str, senha: str):
         return None
 
     usuario = response.data[0] 
-    logado = False
     if not Verificar_senha(senha, usuario["senha_hash"]):
         return None 
     return usuario
