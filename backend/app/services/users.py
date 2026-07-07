@@ -3,6 +3,8 @@ from database import supabase
 from services.auth import Gerar_hash_senha, Verificar_senha
 
 
+
+
 def InsertUser(nome: str, email: str, senha: str):
     usuario_existente = (
     supabase.table("usuarios")
@@ -38,3 +40,4 @@ def Loging(email: str, senha: str):
         return None 
     return usuario
     
+

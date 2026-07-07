@@ -4,12 +4,15 @@ import jwt
 from datetime import datetime, timedelta
 import os
 from jose import jwt, JWTError, ExpiredSignatureError
-
+from fastapi import Header, HTTPException, Depends
+from typing import Optional
+from fastapi.security import OAuth2PasswordBearer
 
 
 SECRET_KEY_ACESSO = os.getenv("TOKEN_ACESSO_SECRET_KEY_")
 SECRET_KEY_EMAIL = os.getenv("TOKEN_EMAIL_SECRET_KEY")
 password_hash = PasswordHash.recommended()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="usuarios/login-form")
 
 
 def Gerar_hash_senha(senha: str):
@@ -47,9 +50,19 @@ def verificar_token(token: str):
 
     except JWTError:
         return None
-    
-def usuario_logado(token: str):
-    pass
+
+
+# dependencia
+def usuario_logado(token: str =  Depends(oauth2_scheme)):
+    user_id = verificar_token(token)
+    if user_id is None:
+        raise HTTPException(
+            status_code=401,
+            detail=" Token inválido ou expirado"
+        )
+    return user_id
+
+
 
     
 # def criar_token_confirmacao_email(user_id: str):

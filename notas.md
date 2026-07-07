@@ -20,49 +20,55 @@ https://supabase.com/docs/reference/python/select
 
 ## ✅ Já concluído
 
-- [X]  Estrutura do projeto
-- [X]  Conexão com Supabase
-- [X]  Hash de senha
-- [X]  Cadastro de usuário (`POST /usuarios`)
-- [X]  Login (`POST /usuarios/login`)
-- [X]  Geração de JWT
-- [X]  Verificação de JWT
+- [X] Estrutura do projeto
+- [X] Conexão com Supabase
+- [X] Hash de senha
+- [X] Cadastro de usuário (`POST /usuarios`)
+- [X] Login (`POST /usuarios/login`)
+- [X] Geração de JWT
+- [X] Verificação de JWT
 
 # 1. Finalizar autenticação
 
 ## Dependência de usuário logado
 
-- [ ]  Criar função `usuario_logado()`
-- [ ]  Ler token do header `Authorization`
-- [ ]  Extrair o Bearer Token
-- [ ]  Chamar `verificar_token()`
-- [ ]  Retornar `user_id`
+- [X] Criar função `usuario_logado()`
+- [X] Ler token do header `Authorization`
+- [X] Extrair o Bearer Token
+- [X] Chamar `verificar_token()`
+- [X] Retornar `user_id`
 
 ## Teste de autenticação
 
-- [ ]  Criar endpoint `GET /usuarios/me`
-- [ ]  Retornar o ID do usuário logado
-- [ ]  Testar no Swagger
+- [X] Criar endpoint `GET /usuarios/me`
+- [X] Retornar o ID do usuário logado
+- [X] Testar no Swagger
+
+- configurar para poder testar os enpoint protegidos atraves do swagger
 
 ---
 
 # 2. Categorias
 
+- precisa criar as polices
+
 ## Backend
 
-- [ ]  Schema de Categoria
-- [ ]  Service de Categoria
-- [ ]  Route de Categoria
+- [X] Schema de Categoria
+- [X] Service de Categoria
+- [X] Route de Categoria
 
 ## Endpoints
 
-- [ ]  `POST /categorias`
-- [ ]  `GET /categorias`
-- [ ]  `DELETE /categorias/{id}`
+- [X] `POST /categorias`
+- [X] `GET /categorias`
+
+  - [X]  melhorar a formatacao do **response**
+- [X] `DELETE /categorias/{id}`
 
 ## Segurança
 
-- [ ]  Todas as rotas usando `Depends(usuario_logado)`
+- [X] Todas as rotas usando `Depends(usuario_logado)`
 
 ---
 
@@ -70,15 +76,15 @@ https://supabase.com/docs/reference/python/select
 
 ## Backend
 
-- [ ]  Schema de Tag
-- [ ]  Service de Tag
-- [ ]  Route de Tag
+- [ ] Schema de Tag
+- [ ] Service de Tag
+- [ ] Route de Tag
 
 ## Endpoints
 
-- [ ]  `POST /tags`
-- [ ]  `GET /tags`
-- [ ]  `DELETE /tags/{id}`
+- [ ] `POST /tags`
+- [ ] `GET /tags`
+- [ ] `DELETE /tags/{id}`
 
 ---
 
@@ -86,17 +92,17 @@ https://supabase.com/docs/reference/python/select
 
 ## Backend
 
-- [ ]  Schema de Transação
-- [ ]  Service de Transação
-- [ ]  Route de Transação
+- [ ] Schema de Transação
+- [ ] Service de Transação
+- [ ] Route de Transação
 
 ## Endpoints
 
-- [ ]  `POST /transacoes`
-- [ ]  `GET /transacoes`
-- [ ]  `GET /transacoes/{id}`
-- [ ]  `PUT /transacoes/{id}`
-- [ ]  `DELETE /transacoes/{id}`
+- [ ] `POST /transacoes`
+- [ ] `GET /transacoes`
+- [ ] `GET /transacoes/{id}`
+- [ ] `PUT /transacoes/{id}`
+- [ ] `DELETE /transacoes/{id}`
 
 ---
 
@@ -104,16 +110,16 @@ https://supabase.com/docs/reference/python/select
 
 ## Backend
 
-- [ ]  Schema de Anotação
-- [ ]  Service de Anotação
-- [ ]  Route de Anotação
+- [ ] Schema de Anotação
+- [ ] Service de Anotação
+- [ ] Route de Anotação
 
 ## Endpoints
 
-- [ ]  `POST /anotacoes`
-- [ ]  `GET /anotacoes`
-- [ ]  `PUT /anotacoes/{id}`
-- [ ]  `DELETE /anotacoes/{id}`
+- [ ] `POST /anotacoes`
+- [ ] `GET /anotacoes`
+- [ ] `PUT /anotacoes/{id}`
+- [ ] `DELETE /anotacoes/{id}`
 
 ---
 
@@ -121,22 +127,22 @@ https://supabase.com/docs/reference/python/select
 
 ## Resumo mensal
 
-- [ ]  Receitas do mês
-- [ ]  Despesas do mês
-- [ ]  Saldo do mês
+- [ ] Receitas do mês
+- [ ] Despesas do mês
+- [ ] Saldo do mês
 
 ## Endpoint
 
-- [ ]  `GET /analytics/resumo-mensal`
+- [ ] `GET /analytics/resumo-mensal`
 
 ---
 
 # 7. Relatórios e gráficos
 
-- [ ]  Gastos por categoria
-- [ ]  Evolução mensal
-- [ ]  Categorias mais utilizadas
-- [ ]  Tags mais utilizadas
+- [ ] Gastos por categoria
+- [ ] Evolução mensal
+- [ ] Categorias mais utilizadas
+- [ ] Tags mais utilizadas
 
 ---
 
@@ -144,40 +150,40 @@ https://supabase.com/docs/reference/python/select
 
 ## Autenticação
 
-- [ ]  Tela de cadastro
-- [ ]  Tela de login
-- [ ]  Salvar token
-- [ ]  Logout
+- [ ] Tela de cadastro
+- [ ] Tela de login
+- [ ] Salvar token
+- [ ] Logout
 
 ## Categorias
 
-- [ ]  Criar categoria
-- [ ]  Listar categorias
+- [ ] Criar categoria
+- [ ] Listar categorias
 
 ## Tags
 
-- [ ]  Criar tag
-- [ ]  Listar tags
+- [ ] Criar tag
+- [ ] Listar tags
 
 ## Transações
 
-- [ ]  Criar transação
-- [ ]  Editar transação
-- [ ]  Excluir transação
-- [ ]  Listar transações
+- [ ] Criar transação
+- [ ] Editar transação
+- [ ] Excluir transação
+- [ ] Listar transações
 
 ## Dashboard
 
-- [ ]  Cards de resumo
-- [ ]  Gráficos
+- [ ] Cards de resumo
+- [ ] Gráficos
 
 ---
 
 # Meta Atual
 
-- [ ]  Criar `usuario_logado()`
-- [ ]  Criar `GET /usuarios/me`
-- [ ]  Criar `POST /categorias`
-- [ ]  Criar `GET /categorias`
+- [ ] Criar `usuario_logado()`
+- [ ] Criar `GET /usuarios/me`
+- [ ] Criar `POST /categorias`
+- [ ] Criar `GET /categorias`
 
 Quando isso estiver pronto, a autenticação e o primeiro CRUD estarão funcionando.
