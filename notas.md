@@ -63,7 +63,7 @@ https://supabase.com/docs/reference/python/select
 - [X] `POST /categorias`
 - [X] `GET /categorias`
 
-  - [X]  melhorar a formatacao do **response**
+  - [X] melhorar a formatacao do **response**
 - [X] `DELETE /categorias/{id}`
 
 ## Segurança
@@ -76,15 +76,15 @@ https://supabase.com/docs/reference/python/select
 
 ## Backend
 
-- [ ] Schema de Tag
-- [ ] Service de Tag
-- [ ] Route de Tag
+- [X] Schema de Tag
+- [X] Service de Tag
+- [X] Route de Tag
 
 ## Endpoints
 
-- [ ] `POST /tags`
-- [ ] `GET /tags`
-- [ ] `DELETE /tags/{id}`
+- [X] `POST /tags`
+- [X] `GET /tags`
+- [X] `DELETE /tags/{id}`
 
 ---
 
@@ -92,17 +92,17 @@ https://supabase.com/docs/reference/python/select
 
 ## Backend
 
-- [ ] Schema de Transação
-- [ ] Service de Transação
-- [ ] Route de Transação
+- [X] Schema de Transação
+- [X] Service de Transação
+- [X] Route de Transação
 
 ## Endpoints
 
-- [ ] `POST /transacoes`
-- [ ] `GET /transacoes`
+- [X] `POST /transacoes`
+- [X] `GET /transacoes`
 - [ ] `GET /transacoes/{id}`
-- [ ] `PUT /transacoes/{id}`
-- [ ] `DELETE /transacoes/{id}`
+- [X] `PUT /transacoes/{id}`
+- [X] `DELETE /transacoes/{id}`
 
 ---
 

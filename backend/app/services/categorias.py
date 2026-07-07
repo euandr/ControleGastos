@@ -12,9 +12,16 @@ def InsertCategoria(usuario_id:str, nome:str):
 
     if categoria_existente.data:
         raise ValueError("Categoria ja existe")
-    
-    
+
+    response = (
+        supabase.table("categorias")
+        .insert({ "usuario_id": usuario_id, "nome": nome})
+        .execute()
+    )
     return response.data[0]
+
+
+
 
 def BuscarCategorias(usuario_id: str):
     response = (
@@ -24,6 +31,8 @@ def BuscarCategorias(usuario_id: str):
         .execute()
     )
     return response.data
+
+
 
 def DeletarCategoria(usuario_id: str, id_categoria: str):
     response = (
