@@ -100,7 +100,7 @@ https://supabase.com/docs/reference/python/select
 
 - [X] `POST /transacoes`
 - [X] `GET /transacoes`
-- [ ] `GET /transacoes/{id}`
+- [X] `GET /transacoes/{id}`
 - [X] `PUT /transacoes/{id}`
 - [X] `DELETE /transacoes/{id}`
 
@@ -110,16 +110,16 @@ https://supabase.com/docs/reference/python/select
 
 ## Backend
 
-- [ ] Schema de Anotação
-- [ ] Service de Anotação
-- [ ] Route de Anotação
+- [X] Schema de Anotação
+- [X] Service de Anotação
+- [X] Route de Anotação
 
 ## Endpoints
 
-- [ ] `POST /anotacoes`
-- [ ] `GET /anotacoes`
-- [ ] `PUT /anotacoes/{id}`
-- [ ] `DELETE /anotacoes/{id}`
+- [X] `POST /anotacoes`
+- [X] `GET /anotacoes`
+- [X] `PATCH /anotacoes/{id}`
+- [X] `DELETE /anotacoes/{id}`
 
 ---
 
