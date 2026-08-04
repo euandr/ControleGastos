@@ -1,13 +1,8 @@
 
-
+import DashboardPage from './pages/dashboard'
 
 function App() {
-
-  return (
-    <>
-      <h1>Vite + React</h1>
-    </>
-  )
+  return <DashboardPage />
 }
 
 export default App
