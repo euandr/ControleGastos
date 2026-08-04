@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException, Depends
 from services.auth import usuario_logado
-from services.analytics_service import BuscarResumoMensal,BuscarUltimosMeses,ResumoGastos,ResumoReceitas,ValorPorCategoria
+from services.analises_service import BuscarResumoMensal,BuscarUltimosMeses,ResumoGastos,ResumoReceitas,ValorPorCategoria
 from datetime import datetime
 import calendar
 
 router = APIRouter(
-    prefix="/analytics",
-    tags=["analytics"]
+    prefix="/analises",
+    tags=["analises"]
 )
 
 

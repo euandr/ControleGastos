@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from routes import users,categorias,tags, transacoes, anotacoes, analytics
+from routes import users,categorias,tags, transacoes, anotacoes, analises
 
 
 app = FastAPI(title="ControleGastos API", version="1.0.0")
@@ -12,7 +12,7 @@ app.include_router(categorias.router)
 app.include_router(tags.router)
 app.include_router(transacoes.router)
 app.include_router(anotacoes.router)
-app.include_router(analytics.router)
+app.include_router(analises.router)
 
 
 @app.get("/")
