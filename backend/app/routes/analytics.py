@@ -66,11 +66,13 @@ def resumo_mensal_receitas(mes: str, user_id: str = Depends(usuario_logado)):
     maior_entrada = max([receita['valor'] for receita in resumo])
     qtd_receitas = len([receita['valor'] for receita in resumo])
 
-    return resumo
-    # return{
-    #     "totalRecebido": total,
-    #     "maiorEntrada": maior_entrada,
-    #     "quantidadeReceitas": qtd_receitas
-    #     }
 
+    return{
+        'resumo':{
+            "totalRecebido": total,
+            "maiorEntrada": maior_entrada,
+            "quantidadeReceitas": qtd_receitas
+            },
+        'ValorPorCategoria': ValorPorCategoria(mes, user_id)
+        }
 

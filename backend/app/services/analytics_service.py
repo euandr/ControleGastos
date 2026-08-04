@@ -58,7 +58,7 @@ def BuscarUltimosMeses(mes:str, user_id:str):
     return r
 
 
-def ResumoGastos(mes, user_id):
+def ResumoGastos(mes:str, user_id:str):
 
     response = (
             supabase.table("transacoes")
@@ -72,7 +72,7 @@ def ResumoGastos(mes, user_id):
     
 
 
-def ResumoReceitas(mes, user_id):
+def ResumoReceitas(mes:str, user_id:str):
     response = (
             supabase.table("transacoes")
             .select("valor", "id_categoria")
@@ -83,25 +83,34 @@ def ResumoReceitas(mes, user_id):
         )
     return response.data
 
-def ValorPorCategoria(id_categoria, mes, user_id):
-    response = (
+def ValorPorCategoria(mes:str, user_id:str):
+    responseTransacoes = (
             supabase.table("transacoes")
-            .select("valor")
+            .select("valor",'id_categoria')
             .eq("usuario_id", user_id)
             .eq("mes_ref", mes)
             .eq("tipo", "receita")
-            .eq("id_categoria", id_categoria)
             .execute()
-        )
-    nomeCategoria = BuscarCategorias(user_id,id_categoria).data[0]["nome"]
-    return response.data
+        ).data
+    categorias = BuscarCategorias(user_id)
+
+    resultado= []
+   
+    for c in categorias:
+        total = 0.0
+
+        for t in responseTransacoes:
+            if c['id']==t['id_categoria']:
+                total+=t['valor']
+
+        resultado.append({
+            'id':c['id'],
+            'nome':c['nome'], 
+            'valor_total':total
+        })
+    return resultado
 
 
-# entrada = id_categoria, mes, user_id
-# sairda = {
-#     categoria1 : 22,
-#     categoria2: 23,
-# }
 
 
 
