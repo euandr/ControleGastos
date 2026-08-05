@@ -24,13 +24,15 @@ html,
 body,
 #root {
   margin: 0;
+  height: 100%;
   min-height: 100%;
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, sans-serif;
+  font-family: "Segoe UI", Tahoma, sans-serif;
   background: var(--bg);
   color: var(--text);
+  overflow: hidden;
 }
 
 h1,
@@ -40,10 +42,13 @@ p {
 }
 
 .dashboard-shell {
-  min-height: 100vh;
+  height: 100vh;
   display: grid;
   grid-template-columns: var(--sidebar-width) 1fr;
+  gap: 16px;
+  padding: 12px;
   background: linear-gradient(180deg, #f9fbff 0%, #eef3f9 100%);
+  overflow: hidden;
 }
 
 .dashboard-shell.sidebar-collapsed {
@@ -51,12 +56,18 @@ p {
 }
 
 .sidebar {
+  height: calc(100vh - 24px);
   background: var(--surface);
-  border-right: 1px solid var(--border);
+  border: 1px solid #e6edf4;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 12px;
+  gap: 14px;
+  padding: 14px 12px 12px;
+  position: sticky;
+  top: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(31, 41, 55, 0.05);
 }
 
 .brand-row {
@@ -65,7 +76,7 @@ p {
   justify-content: space-between;
   gap: 8px;
   border-bottom: 1px solid #edf1f6;
-  padding-bottom: 10px;
+  padding-bottom: 12px;
 }
 
 .brand {
@@ -76,8 +87,8 @@ p {
 }
 
 .brand-logo {
-  width: 26px;
-  height: 26px;
+  width: 40px;
+  height: 40px;
   object-fit: contain;
 }
 
@@ -89,63 +100,87 @@ p {
 }
 
 .collapse-toggle {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border: 1px solid #dce5ef;
-  border-radius: 7px;
+  border-radius: 9px;
   display: grid;
   place-items: center;
   color: #62758f;
-  background: #fff;
+  background: #f6f8fc;
   cursor: pointer;
 }
 
 .menu {
   display: grid;
-  gap: 4px;
+  gap: 8px;
+  padding-top: 10px;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 11px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 10px;
   background: transparent;
   color: #64748b;
   text-align: left;
-  padding: 8px 10px;
-  font-size: 14px;
+  padding: 10px 12px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
 }
 
 .menu-item svg {
   flex-shrink: 0;
+  width: 18px;
+  height: 18px;
 }
 
 .menu-item:hover {
-  background: #f1f6ff;
+  background: #f5f7fb;
+  color: #64748b;
 }
 
 .menu-item.active {
-  background: var(--green);
+  background: linear-gradient(180deg, #18be84 0%, #14b57d 100%);
   color: #fff;
+  padding: 12px 14px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 .logout {
   margin-top: auto;
+  border: 0;
+  border-top: 1px solid #edf1f6;
+  padding: 18px 10px 10px;
   display: flex;
   align-items: center;
   gap: 8px;
-  border: none;
   background: transparent;
   color: #ef4444;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   text-align: left;
-  padding: 8px 10px;
   cursor: pointer;
+  border-radius: 9px;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.logout svg {
+  width: 17px;
+  height: 17px;
+}
+
+.logout:hover {
+  background: #ffe9ec;
+  color: #c12b42;
 }
 
 .sidebar-collapsed .brand-name,
@@ -160,6 +195,8 @@ p {
 
 .sidebar-collapsed .brand-row {
   flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .sidebar-collapsed .menu-item,
@@ -168,10 +205,39 @@ p {
   padding-inline: 0;
 }
 
+.sidebar-collapsed .menu-item {
+  padding: 12px;
+}
+
+.sidebar-collapsed .menu-item.active {
+  padding: 14px;
+  border-radius: 12px;
+}
+
+.sidebar-collapsed .menu-item svg {
+  width: 20px;
+  height: 20px;
+}
+
+.sidebar-collapsed .collapse-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #eef2f7;
+}
+
+.sidebar-collapsed .menu {
+  justify-items: center;
+}
+
 .dashboard-main {
-  padding: 18px;
+  height: calc(100vh - 24px);
+  min-width: 0;
+  overflow-y: auto;
+  padding: 6px 18px 18px 0;
   display: grid;
   gap: 14px;
+  scrollbar-gutter: stable;
 }
 
 .topbar {
@@ -196,7 +262,7 @@ p {
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .topbar select {
@@ -208,8 +274,8 @@ p {
 }
 
 .avatar {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border: 2px solid #2bc0e4;
   border-radius: 50%;
   font-weight: 700;
@@ -243,14 +309,14 @@ p {
 
 .summary-head p {
   color: #6b7280;
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.3px;
 }
 
 .summary-icon {
-  width: 24px;
-  height: 24px;
+  width: 33px;
+  height: 33px;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -315,27 +381,31 @@ p {
 }
 
 .chart-card {
-  padding: 12px 14px 14px;
+  padding: 16px 18px 14px;
 }
 
 .chart-card h2,
 .table-card h2 {
-  font-size: 16px;
+  font-size: 23px;
   margin-bottom: 12px;
 }
 
 .chart-height {
-  height: 250px;
+  height: 260px;
 }
 
 .category-height {
-  height: 250px;
+  height: 260px;
 }
 
 .chart-panel {
-  border: 1px solid #ecf0f4;
+  /* border: 1px solid #e6edf4; */
+
   border-radius: 10px;
-  background: linear-gradient(180deg, #fbfdff 0%, #f7faff 100%);
+  background: #ffffff;
+}
+.chart-comparativo {
+  padding-top: 15px;
 }
 
 .grouped-bars {
@@ -417,12 +487,7 @@ p {
 }
 
 .category-scale {
-  margin-top: 8px;
-  display: flex;
-  justify-content: space-between;
-  color: #5f7188;
-  font-size: 11px;
-  font-weight: 700;
+  display: none;
 }
 
 .category-bars {
@@ -514,7 +579,7 @@ th {
   display: inline-flex;
   padding: 4px 8px;
   border-radius: 999px;
-  font-size: 10px;
+  /* font-size: 10px; */
   font-weight: 800;
 }
 
@@ -572,10 +637,19 @@ th {
 @media (max-width: 780px) {
   .dashboard-shell {
     grid-template-columns: 1fr;
+    height: auto;
+    overflow: visible;
+    padding: 0;
   }
 
   .sidebar {
+    height: auto;
+    position: relative;
+    top: 0;
+    border-radius: 0;
+    border-left: 0;
     border-right: 0;
+    border-top: 0;
     border-bottom: 1px solid var(--border);
     padding: 12px;
     gap: 10px;
@@ -591,6 +665,8 @@ th {
   }
 
   .dashboard-main {
+    height: auto;
+    overflow: visible;
     padding: 14px;
   }
 
@@ -613,6 +689,11 @@ th {
 
   .amount {
     font-size: 27px;
+  }
+
+  .chart-card h2,
+  .table-card h2 {
+    font-size: 24px;
   }
 
   .cat-row {
