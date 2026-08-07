@@ -4,7 +4,7 @@ import {
   LogOut,
   type LucideIcon,
 } from "lucide-react";
-import logo from "../../assets/logo.png";
+import logo from "../assets/logo.png";
 
 export type MenuItem = {
   label: string;

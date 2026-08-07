@@ -1,5 +1,5 @@
 
-import DashboardPage from './pages/Dashboard'
+import DashboardPage from './pages/dashboard'
 
 function App() {
   return <DashboardPage />
