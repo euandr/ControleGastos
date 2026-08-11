@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from routes import users,categorias,tags, transacoes, anotacoes, analises
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="ControleGastos API", version="1.0.0")
 

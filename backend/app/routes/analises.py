@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from services.auth import usuario_logado
-from services.analises_service import BuscarResumoMensal,BuscarUltimosMeses,ResumoGastos,ResumoReceitas,ValorPorCategoria
+from services.analises_service import BuscarResumoMensal,BuscarUltimosMeses,ResumoGastos,ResumoReceitas,ValorPorCategoria, MesesDisponiveis
 from datetime import datetime
 import calendar
 
@@ -76,3 +76,6 @@ def resumo_mensal_receitas(mes: str, user_id: str = Depends(usuario_logado)):
         'ValorPorCategoria': ValorPorCategoria(mes, user_id)
         }
 
+@router.get("/meses_disponiveis")
+def meses_disponiveis(user_id: str = Depends(usuario_logado)):
+    return {"meses":MesesDisponiveis(user_id) }

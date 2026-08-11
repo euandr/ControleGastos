@@ -111,7 +111,17 @@ def ValorPorCategoria(mes:str, user_id:str):
     return resultado
 
 
+def MesesDisponiveis(user_id:str):
+    response = (
+            supabase.table("transacoes")
+            .select("mes_ref")
+            .eq("usuario_id", user_id)
+            .execute()
+        ).data
+    meses = set()  #set nao permite duplicidade de itens, já remove automaticamente
+    for r in response:
+        meses.add(r['mes_ref'])
 
-
+    return meses
 
 
