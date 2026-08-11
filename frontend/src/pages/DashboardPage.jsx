@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import SummaryCards from "../components/SummaryCards";
@@ -15,6 +15,8 @@ import {
 } from "./data";
 import "./dashboard.css";
 
+import { buscarResumoMensal } from "../services/dashboard";
+
 export default function DashboardPage() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
@@ -26,6 +28,12 @@ export default function DashboardPage() {
     () => Array.from({ length: 11 }, (_, index) => index * 100),
     [],
   );
+
+  useEffect(() => {
+    buscarResumoMensal("2026-07").then((dados) => {
+      console.log(dados);
+    });
+  }, []);
 
   return (
     <div
