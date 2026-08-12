@@ -15,10 +15,12 @@ import {
 } from "./data";
 import "./dashboard.css";
 
-import { buscarResumoMensal } from "../services/dashboard";
+import { MesesDisponiveis, buscarNome } from "../services/dashboard";
 
 export default function DashboardPage() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [listMonth, setListMonth] = useState([]);
+  const [nome, setNome] = useState("");
 
   const compareTicks = useMemo(
     () => Array.from({ length: 11 }, (_, index) => index * 100),
@@ -30,9 +32,14 @@ export default function DashboardPage() {
   );
 
   useEffect(() => {
-    buscarResumoMensal("2026-07").then((dados) => {
-      console.log(dados);
+    MesesDisponiveis().then((dados) => {
+      setListMonth(dados);
     });
+
+    buscarNome().then((dados) => {
+      setNome(dados);
+    })
+    
   }, []);
 
   return (
@@ -47,8 +54,9 @@ export default function DashboardPage() {
 
       <main className="dashboard-main">
         <Topbar
-          title="Ola, Armando"
+          title={`Ola, ${nome}`}
           subtitle="Aqui esta o seu resumo financeiro de hoje."
+          meses={listMonth}
         />
 
         <SummaryCards cards={summaryCards} />

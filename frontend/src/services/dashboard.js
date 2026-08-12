@@ -1,9 +1,11 @@
 import api from "../api";
 
-export async function buscarResumoMensal(mes) {
-  const response = await api.get("/analises/Cards_resumo-mensal", {
-    params: { mes },
-  });
+export async function MesesDisponiveis() {
+  const response = await api.get("/analises/meses_disponiveis");
+  return response.data.meses;
+}
 
-  return response.data;
+export async function buscarNome() {
+  const response = await api.get("/usuarios/me");
+  return response.data.nome;
 }
