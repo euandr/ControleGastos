@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from schemas.users import UsersCreate, UserLogin
-from services.users import InsertUser, Loging
+from services.users import InsertUser, Loging, BuscarNomeUsuario
 from services.auth import criar_token_acesso, verificar_token, usuario_logado
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -53,9 +53,11 @@ async def login_form(dados_form: OAuth2PasswordRequestForm= Depends()):
 
 @router.get("/me")
 async def me(user_id: str = Depends(usuario_logado)):
+    nome = BuscarNomeUsuario(user_id)
     return{
         "message":"voce está autenticado",
-        "user_id":user_id
+        "user_id":user_id,
+        "nome": nome
     }
 
 # @router.put   ("/esqueci_senha") 

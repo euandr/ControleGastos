@@ -40,4 +40,13 @@ def Loging(email: str, senha: str):
         return None 
     return usuario
     
-
+def BuscarNomeUsuario(user_id: str):
+    response = (
+        supabase.table("usuarios")
+        .select("nome")
+        .eq("id", user_id)
+        .execute()
+    )
+    if not response.data:
+        return None
+    return response.data[0]["nome"]
