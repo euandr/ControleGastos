@@ -9,3 +9,8 @@ export async function buscarNome() {
   const response = await api.get("/usuarios/me");
   return response.data.nome;
 }
+
+export async function buscarResumo(mes) {
+  const response = await api.get(`/analises/Cards_resumo-mensal?mes=${mes}`);
+  return response.data;
+}

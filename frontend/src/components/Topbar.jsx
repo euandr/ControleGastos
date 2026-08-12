@@ -1,4 +1,4 @@
-export default function Topbar({ title, subtitle, meses }) {
+export default function Topbar({ title, subtitle, meses, mesSelecionado, setMesSelecionado }) {
   let nome_meses = [
     "Janeiro",
     "Fevereiro",
@@ -13,6 +13,7 @@ export default function Topbar({ title, subtitle, meses }) {
     "Novembro",
     "Dezembro",
   ];
+
   return (
     <header className="topbar">
       <div>
@@ -21,10 +22,14 @@ export default function Topbar({ title, subtitle, meses }) {
       </div>
 
       <div className="topbar-actions">
-        <select aria-label="Mes">
+        <select
+          aria-label="Mes"
+          value={mesSelecionado}
+          onChange={(e) => setMesSelecionado(e.target.value)}
+        >
           {meses.map((x) => (
-            <option key={x}>
-              {nome_meses[parseInt(x.slice(5)) + 1]} {x.slice(0, 4)}
+            <option key={x} value={x}>
+              {nome_meses[parseInt(x.slice(5)) - 1]} {x.slice(0, 4)}
             </option>
           ))}
         </select>

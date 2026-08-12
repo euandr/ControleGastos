@@ -16,7 +16,9 @@ export default function SummaryCards({ cards }) {
             </div>
 
             <p className={`amount ${card.tone}`}>{card.amount}</p>
-            {card.note ? <p className="note">{card.note}</p> : null}
+            {card.title == "SALDO TOTAL" ? (
+              <p className="note">{"+ 12% em relacao ao mes anterior"}</p>
+            ) : null}
           </article>
         );
       })}
