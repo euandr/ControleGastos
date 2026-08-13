@@ -7,9 +7,8 @@ def BuscarResumoMensal(user_id, mes):
     # 2026-07
     response = (
             supabase.table("transacoes")
-            .select("tipo","valor")
+            .select("tipo","valor","mes_ref")
             .eq("usuario_id", user_id)
-            .eq("mes_ref", mes)
             .execute()
         )
 
@@ -20,21 +19,40 @@ def BuscarResumoMensal(user_id, mes):
         total_receita = 0
         total_gasto = 0
 
+        saldo_disponivel = 0
+
         for item in dados:
-            if item["tipo"] == "investimento":
-                total_investimento += item["valor"]
+            tipo = item["tipo"]
+            valor = item["valor"]
+            mes_ref = item["mes_ref"]
 
-            elif item["tipo"] == "receita":
-                total_receita += item["valor"]
+            # SALDO ACUMULADO
+            if mes_ref <= mes:
+                if tipo == "receita":
+                    saldo_disponivel += valor
 
-            elif item["tipo"] == "gasto":
-                total_gasto += item["valor"]
+                elif tipo == "gasto":
+                    saldo_disponivel -= valor
+
+                elif tipo == "investimento":
+                    saldo_disponivel -= valor
+
+            # RESUMO DO MÊS SELECIONADO
+            if mes_ref == mes:
+                if tipo == "receita":
+                    total_receita += valor
+
+                elif tipo == "gasto":
+                    total_gasto += valor
+
+                elif tipo == "investimento":
+                    total_investimento += valor
 
         return {
             "totalGasto": total_gasto,
             "totalReceita": total_receita,
             "totalInvestimento": total_investimento,
-            "Sdisponivel": total_receita - total_gasto - total_investimento
+            "Sdisponivel": saldo_disponivel
         }
     return resumo()
 
