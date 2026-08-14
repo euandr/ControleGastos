@@ -17,7 +17,7 @@ export default function SummaryCards({ cards }) {
 
             <p className={`amount ${card.tone}`}>{card.amount}</p>
             {card.title == "SALDO TOTAL" ? (
-              <p className="note">{"+ 12% em relacao ao mes anterior"}</p>
+              <p className="note">{"Saldo acumulado até o mês selecionado"}</p>
             ) : null}
           </article>
         );

@@ -45,7 +45,7 @@ export default function Sidebar({ isCollapsed, onToggle, menuItems }) {
       </nav>
 
       <div className="sidebar-divider logout-divider" aria-hidden="true" />
-      <button className="logout" type="button">
+      <button className="logout sair-button" type="button">
         <LogOut size={18} />
         <span className="menu-label">Sair</span>
       </button>

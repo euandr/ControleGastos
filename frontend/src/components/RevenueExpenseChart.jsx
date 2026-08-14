@@ -12,6 +12,7 @@ export default function RevenueExpenseChart({
   data,
   compareTicks,
   formatCurrency,
+  limiteGrafico,
 }) {
   return (
     <article className="card chart-card">
@@ -26,7 +27,7 @@ export default function RevenueExpenseChart({
             <YAxis
               ticks={compareTicks}
               width={42}
-              domain={[0, 1000]}
+              domain={[0, limiteGrafico]}
               axisLine={false}
               tickLine={false}
               tickFormatter={(value) => String(value)}

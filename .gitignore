@@ -6,3 +6,7 @@ backend/.env
 backend/venv/
 
 docs/
+
+backend
+
+/frontend/.env

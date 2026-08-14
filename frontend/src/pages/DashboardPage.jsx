@@ -5,14 +5,6 @@ import SummaryCards from "../components/SummaryCards";
 import RevenueExpenseChart from "../components/RevenueExpenseChart";
 import CategoryChart from "../components/CategoryChart";
 import TransactionsTable from "../components/TransactionsTable";
-import {
-  categories,
-  formatCurrency,
-  menuItems,
-  revenueExpense,
-  rows,
-  summaryCards,
-} from "./data";
 
 
 import {
@@ -34,6 +26,9 @@ import {
   MesesDisponiveis,
   buscarNome,
   buscarResumo,
+  ultimosTresMeses,
+  buscarGastosPorCategoria,
+  buscarMovimetacoes,
 } from "../services/dashboard";
 
 export default function DashboardPage() {
@@ -51,16 +46,41 @@ export default function DashboardPage() {
     'totalReceita': 0,
   });
 
+  const [revenueExpenseData, setRevenueExpenseData] = useState([]);
+  const [maiorValorGrafico, setMaiorValoGrafico] = useState(0);
 
-  const compareTicks = useMemo(
-    () => Array.from({ length: 11 }, (_, index) => index * 100),
-    [],
+  const [gastosPorCategoria, setGastosPorCategoria] =useState([]);
+
+  const [dataMovimentacoes, setDataMovimentacoes]=useState([])
+
+
+  const limiteGrafico = Math.ceil(maiorValorGrafico / 500) * 500;
+  const compareTicks = useMemo(() => {
+    const intervalo = limiteGrafico / 5;
+
+    return Array.from({ length: 6 }, (_, index) => index * intervalo);
+  }, [limiteGrafico]);
+  // const compareTicks = useMemo(
+  //   () => Array.from({ length: 11 }, (_, index) => index * 100),
+  //   [],
+  // );
+
+
+
+  const maiorValorCategoria = Math.max(
+    ...gastosPorCategoria.map((categoria) => categoria.value),
+    0,
+  );
+  const limiteCategoria = Math.max(
+    Math.ceil(maiorValorCategoria / 500) * 500,
+    500,
   );
   const categoryTicks = useMemo(
-    () => Array.from({ length: 11 }, (_, index) => index * 100),
-    [],
+    () =>
+      Array.from({ length: 6 }, (_, index) => index * (limiteCategoria / 5)),
+    [limiteCategoria],
   );
-
+  
   useEffect(() => {
     MesesDisponiveis().then((dados) => {
       setListMonth(dados);
@@ -76,13 +96,46 @@ export default function DashboardPage() {
     buscarResumo(mesSelecionado).then((dados) => {
       setResumo(dados);
     })
+
+    ultimosTresMeses(mesSelecionado).then(([dados, maiorValor]) => {
+      setRevenueExpenseData(dados);
+      setMaiorValoGrafico(maiorValor);
+    });
+
+    buscarGastosPorCategoria(mesSelecionado).then((dados) => {
+      setGastosPorCategoria(dados);
+    });
+
+    buscarMovimetacoes(mesSelecionado).then((dados)=>{
+      setDataMovimentacoes(dados);
+    });
+
   }, [mesSelecionado]);
 
 
   // Testes AQUI    - Apague futuramente
-  useEffect(() => {
-    console.log(resumo);
-  }, [resumo]);
+  // useEffect(() => {
+  //   console.log(dataMovimentacoes)
+  // }, [dataMovimentacoes]);
+
+
+
+
+  const formatCurrency = (value) =>
+    value.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+
+  const menuItems = [
+    { label: "Inicio", icon: LayoutDashboard, active: true },
+    { label: "Gastos", icon: TrendingDown },
+    { label: "Receitas", icon: BadgeDollarSign },
+    { label: "Investimentos", icon: PiggyBank },
+    { label: "Anotacoes", icon: Notebook },
+    { label: "Categorias", icon: Tags },
+    { label: "Perfil", icon: User },
+  ];
 
   return (
     <div
@@ -107,34 +160,26 @@ export default function DashboardPage() {
           cards={[
             {
               title: "SALDO TOTAL",
-              amount: resumo.Sdisponivel
-                ? formatCurrency(resumo.Sdisponivel)
-                : "R$ 0,00",
+              amount: formatCurrency(resumo.Sdisponivel),
               tone: "default",
               // note: "+ 12% em relacao ao mes anterior",
               icon: Wallet,
             },
             {
               title: "RECEITAS",
-              amount: resumo.totalReceita
-                ? formatCurrency(resumo.totalReceita)
-                : "R$ 0,00",
+              amount: formatCurrency(resumo.totalReceita),
               tone: "green",
               icon: ArrowUpRight,
             },
             {
               title: "GASTOS",
-              amount: resumo.totalGasto
-                ? formatCurrency(resumo.totalGasto)
-                : "R$ 0,00",
+              amount: formatCurrency(resumo.totalGasto),
               tone: "red",
               icon: ArrowDownRight,
             },
             {
               title: "INVESTIMENTO DO MES",
-              amount: resumo.totalInvestimento
-                ? formatCurrency(resumo.totalInvestimento)
-                : "R$ 0,00",
+              amount: formatCurrency(resumo.totalInvestimento),
               tone: "purple",
               icon: PiggyBank,
             },
@@ -143,18 +188,24 @@ export default function DashboardPage() {
 
         <section className="charts-grid" aria-label="Gráficos">
           <RevenueExpenseChart
-            data={revenueExpense}
+            data={revenueExpenseData}
             compareTicks={compareTicks}
             formatCurrency={formatCurrency}
+            limiteGrafico={limiteGrafico}
           />
+
           <CategoryChart
-            data={categories}
+            data={gastosPorCategoria}
             categoryTicks={categoryTicks}
             formatCurrency={formatCurrency}
+            limiteCategoria={limiteCategoria}
           />
         </section>
 
-        <TransactionsTable rows={rows} />
+        <TransactionsTable
+          rows={dataMovimentacoes}
+          formatCurrency={formatCurrency}
+        />
       </main>
     </div>
   );

@@ -9,7 +9,12 @@ import {
   YAxis,
 } from "recharts";
 
-export default function CategoryChart({ data, categoryTicks, formatCurrency }) {
+export default function CategoryChart({
+  data,
+  categoryTicks,
+  formatCurrency,
+  limiteCategoria,
+}) {
   return (
     <article className="card chart-card category-card">
       <h2>Gastos por Categoria</h2>
@@ -31,7 +36,7 @@ export default function CategoryChart({ data, categoryTicks, formatCurrency }) {
             />
             <XAxis
               type="number"
-              domain={[0, 1000]}
+              domain={[0, limiteCategoria]}
               ticks={categoryTicks}
               axisLine={false}
               tickLine={false}

@@ -184,13 +184,23 @@
   padding: 0 14px;
   border-radius: 14px;
   background: transparent;
-  color: #64748b;
+  color: #fffff;
   cursor: pointer;
   text-align: left;
   transition:
     background 0.2s ease,
     transform 0.2s ease,
     color 0.2s ease;
+}
+
+
+.sair-button {
+  background: transparent !important;
+  color: #ef4444 !important;
+}
+
+.sair-button:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
 }
 
 .menu-item:hover,
@@ -463,6 +473,12 @@
   font-weight: 700;
 }
 
+.tags {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
 .pill.purple {
   color: #7c3aed;
   background: #f3e8ff;
@@ -479,7 +495,11 @@
   color: #475569;
   background: #e2e8f0;
 }
-
+.cor {
+  color: #258ff3 !important;
+  font-size: 14px;
+  
+}
 .tag,
 .amount-cell {
   font-weight: 700;
