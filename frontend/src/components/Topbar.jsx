@@ -34,7 +34,7 @@ export default function Topbar({ title, subtitle, meses, mesSelecionado, setMesS
           ))}
         </select>
         <button className="avatar" type="button" aria-label="Perfil">
-          A
+          {title.slice(5,6).toUpperCase()}
         </button>
       </div>
     </header>

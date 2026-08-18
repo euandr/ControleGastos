@@ -1,7 +1,27 @@
 import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import logo from "../assets/logo.png";
+import { NavLink } from "react-router-dom";
+import {
+  BadgeDollarSign,
+  LayoutDashboard,
+  Notebook,
+  PiggyBank,
+  Tags,
+  TrendingDown,
+  User,
+} from "lucide-react";
 
-export default function Sidebar({ isCollapsed, onToggle, menuItems }) {
+export default function Sidebar({ isCollapsed, onToggle}) {
+
+  const menuItems = [
+    { label: "Inicio", icon: LayoutDashboard, path: "/" },
+    { label: "Gastos", icon: TrendingDown, path: "/gastos" },
+    { label: "Receitas", icon: BadgeDollarSign, path: "/receitas" },
+    { label: "Investimentos", icon: PiggyBank, path: "/investimentos" },
+    { label: "Anotacoes", icon: Notebook, path: "/anotacoes" },
+    { label: "Categorias", icon: Tags, path: "/categorias" },
+    { label: "Perfil", icon: User, path: "/perfil" },
+  ];
   return (
     <aside className="sidebar">
       <div className="brand-row">
@@ -31,15 +51,17 @@ export default function Sidebar({ isCollapsed, onToggle, menuItems }) {
           const Icon = item.icon;
 
           return (
-            <button
+            <NavLink
               key={item.label}
-              className={`menu-item ${item.active ? "active" : ""}`}
-              type="button"
+              to={item.path}
+              className={({ isActive }) =>
+                `menu-item ${isActive ? "active" : ""}`
+              }
               title={item.label}
             >
               <Icon size={18} strokeWidth={2} />
               <span className="menu-label">{item.label}</span>
-            </button>
+            </NavLink>
           );
         })}
       </nav>

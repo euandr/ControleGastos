@@ -1,13 +1,16 @@
 ## -> Futuras alteracoes
 
-- [ ] alimenta tabela: moviementações recentes
-- [ ] ajustar cor do botao **sair**, para ficar vermelho so quando eu passar o mouse por cima
+1. [ ] ajustar itens recebidos
+
+    - [ ] pela sidebar
+
+    como ela vai esta em todas as paginas, alguns dos itens que ela recebe, ja deviam ser renderizados nela.
 
 ## -> Em andamento
 
-- [ ] alimentar grafico2: Gastos por Categoria
-
 ### Depois termino
+
+#### pagina de dashboard
 
 - [ ] resumo mensal
   - [X] prencher cards de resumo com base no mes selecionado
@@ -17,6 +20,11 @@
 
 ## -> Completas
 
+#### pagina de dashboard
+
+- [X] alimentar grafico2: Gastos por Categoria
+- [X] alimenta tabela: moviementações recentes
+- [X] ajustar cor do botao **sair**, para ficar vermelho so quando eu passar o mouse por cima
 - [X] alimentar grafico1: Comparativo: Receitas vs Despesas
   - [X] analisar como os dados sao inseridos no frontend
   - [X] atualizar campos

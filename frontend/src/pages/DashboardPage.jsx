@@ -10,13 +10,7 @@ import TransactionsTable from "../components/TransactionsTable";
 import {
   ArrowDownRight,
   ArrowUpRight,
-  BadgeDollarSign,
-  LayoutDashboard,
-  Notebook,
   PiggyBank,
-  Tags,
-  TrendingDown,
-  User,
   Wallet,
 } from "lucide-react";
 
@@ -127,15 +121,7 @@ export default function DashboardPage() {
       currency: "BRL",
     });
 
-  const menuItems = [
-    { label: "Inicio", icon: LayoutDashboard, active: true },
-    { label: "Gastos", icon: TrendingDown },
-    { label: "Receitas", icon: BadgeDollarSign },
-    { label: "Investimentos", icon: PiggyBank },
-    { label: "Anotacoes", icon: Notebook },
-    { label: "Categorias", icon: Tags },
-    { label: "Perfil", icon: User },
-  ];
+
 
   return (
     <div
@@ -144,7 +130,7 @@ export default function DashboardPage() {
       <Sidebar
         isCollapsed={isSidebarCollapsed}
         onToggle={() => setIsSidebarCollapsed((value) => !value)}
-        menuItems={menuItems}
+        
       />
 
       <main className="dashboard-main">
