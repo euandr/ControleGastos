@@ -1,8 +1,9 @@
 .dashboard-shell {
+  --shell-pad: 16px;
   display: grid;
   grid-template-columns: 228px 1fr;
   gap: 16px;
-  padding: 16px;
+  padding: var(--shell-pad);
   min-height: 100vh;
   background:
     radial-gradient(
@@ -28,9 +29,9 @@
 
 .sidebar {
   position: sticky;
-  top: 16px;
-  height: calc(100dvh - 32px);
-  max-height: calc(100dvh - 32px);
+  top: var(--shell-pad);
+  height: calc(100dvh - (2 * var(--shell-pad)));
+  max-height: calc(100dvh - (2 * var(--shell-pad)));
   min-height: 0;
   padding: 18px 14px 16px;
   display: flex;
@@ -535,8 +536,8 @@
 @media (max-width: 1180px) {
   .dashboard-shell,
   .dashboard-shell.sidebar-collapsed {
+    --shell-pad: 12px;
     grid-template-columns: 88px 1fr;
-    padding: 12px;
   }
 
   .dashboard-shell .brand-copy,
