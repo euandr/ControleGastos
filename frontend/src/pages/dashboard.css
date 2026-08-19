@@ -22,6 +22,9 @@
 .dashboard-shell.sidebar-collapsed {
   grid-template-columns: 116px 1fr;
 }
+.shadow-cards{
+   box-shadow: 1px 5px 5px rgba(0, 0, 0, 0.2) !important;
+}
 
 .sidebar {
   position: sticky;
@@ -294,6 +297,14 @@
 
 .summary-card {
   padding: 18px 18px 16px;
+}
+.tipo-card{
+  font-size:18px !important;  
+  padding-top:20px !important;
+  
+}
+.valor-card{
+  padding-top:px !important;
 }
 
 .summary-head {

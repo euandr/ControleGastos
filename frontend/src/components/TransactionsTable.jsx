@@ -1,6 +1,9 @@
 export default function TransactionsTable({ rows,formatCurrency }) {
   return (
-    <section className="card table-card" aria-label="Movimentacoes recentes">
+    <section
+      className="card table-card shadow-cards"
+      aria-label="Movimentacoes recentes"
+    >
       <h2>Movimentações Recentes</h2>
       <div className="table-wrap">
         <table>
@@ -28,7 +31,6 @@ export default function TransactionsTable({ rows,formatCurrency }) {
           </thead>
           <tbody>
             {rows.map((row) => {
-
               return (
                 <tr key={`${row.description}-${row.type}`}>
                   <td>
@@ -51,11 +53,16 @@ export default function TransactionsTable({ rows,formatCurrency }) {
                   </td>
 
                   <td className={`amount-cell ${row.tone}`}>
-                    {row.type==="gasto"? '-' : row.type==="receita" ? '+' : ''}
+                    {row.type === "gasto"
+                      ? "-"
+                      : row.type === "receita"
+                        ? "+"
+                        : ""}
                     {formatCurrency(row.amount)}
                   </td>
                 </tr>
-              );})}
+              );
+            })}
           </tbody>
         </table>
       </div>

@@ -15,7 +15,7 @@ export default function RevenueExpenseChart({
   limiteGrafico,
 }) {
   return (
-    <article className="card chart-card">
+    <article className="card chart-card shadow-cards">
       <h2>Comparativo: Receitas vs Despesas</h2>
       <div className="chart-comparativo chart-panel chart-height">
         <ResponsiveContainer width="100%" height="100%">

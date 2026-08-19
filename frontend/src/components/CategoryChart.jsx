@@ -16,7 +16,7 @@ export default function CategoryChart({
   limiteCategoria,
 }) {
   return (
-    <article className="card chart-card category-card">
+    <article className="card chart-card category-card shadow-cards ">
       <h2>Gastos por Categoria</h2>
       <div className="chart-panel chart-height category-height">
         <ResponsiveContainer width="100%" height="100%">
