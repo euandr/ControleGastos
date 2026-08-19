@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Sidebar from "../components/Sidebar";
 
+import "./dashboard.css";
 import "./gastos.css";
 
 export default function Gastos(){

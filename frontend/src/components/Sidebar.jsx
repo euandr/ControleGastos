@@ -59,7 +59,7 @@ export default function Sidebar({ isCollapsed, onToggle}) {
               }
               title={item.label}
             >
-              <Icon size={18} strokeWidth={2} />
+              <Icon size={18} strokeWidth={2} className="menu-icon" />
               <span className="menu-label">{item.label}</span>
             </NavLink>
           );
