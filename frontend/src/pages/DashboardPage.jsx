@@ -6,6 +6,7 @@ import RevenueExpenseChart from "../components/RevenueExpenseChart";
 import CategoryChart from "../components/CategoryChart";
 import TransactionsTable from "../components/TransactionsTable";
 
+import {formatCurrency} from "../utils/formatCurrency";
 
 import {
   ArrowDownRight,
@@ -24,6 +25,8 @@ import {
   buscarGastosPorCategoria,
   buscarMovimetacoes,
 } from "../services/dashboard";
+
+
 
 export default function DashboardPage() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -115,11 +118,6 @@ export default function DashboardPage() {
 
 
 
-  const formatCurrency = (value) =>
-    value.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
 
 
 
