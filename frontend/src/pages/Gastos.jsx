@@ -5,6 +5,7 @@ import Filters from "../components/Filters";
 import Header from "../components/Header";
 import SummaryCads from "../components/SummaryCards";
 import PieChart from "../components/ConteinerPieChart";
+import GR_transactionsTable from "../components/GR_transactionsTable";
 
 import { Layers, WalletMinimal, CalendarDays } from "lucide-react";
 
@@ -60,8 +61,8 @@ export default function Gastos() {
             },
           ]}
         />
-        <PieChart data={data}/>
-        
+        <PieChart data={data} />
+        <GR_transactionsTable />
       </main>
     </div>
   );
