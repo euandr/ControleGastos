@@ -18,7 +18,7 @@ export default function Gastos() {
   
   
     const gastos=[
-      {'id':1,'Descricao': 'Aluguel apartamento', 'Categoria':'casa', 'Data': '12/08/2026', 'Tags':['fixo','mensal'],'Pagamento':'cartão de crédito', 'Necessário':true, 'Valor':100.0},
+      {'id':1,'Descricao': 'Aluguel apartamento ', 'Categoria':'casa', 'Data': '12/08/2026', 'Tags':['fixo','mensal'],'Pagamento':'cartão de crédito', 'Necessário':true, 'Valor':100.0},
       {'id':2,'Descricao': 'Supermercado Central', 'Categoria':'almentação', 'Data': '12/08/2026', 'Tags':['essencial'],'Pagamento':'dinheiro', 'Necessário':true, 'Valor':10.0},
       {'id':3,'Descricao': 'Assinatura Streaming', 'Categoria':'lazer', 'Data': '12/08/2026', 'Tags':['recorrente'],'Pagamento':'pix', 'Necessário':false, 'Valor':70.0}
       ]

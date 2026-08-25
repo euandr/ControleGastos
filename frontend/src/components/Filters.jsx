@@ -23,7 +23,7 @@ export default function Filters() {
         <div className="filter">
           <label htmlFor="tag">TAG</label>
           <select id="tag">
-            <option value="">tags</option>
+            <option value="">todas as tags</option>
             <option value="comida">Comida</option>
           </select>
         </div>

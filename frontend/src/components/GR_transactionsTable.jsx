@@ -1,3 +1,6 @@
+import { formatCurrency } from "../utils/formatCurrency";
+
+import { SquarePen, Trash2 } from "lucide-react";
 
 
 // const gastos=[
@@ -9,8 +12,9 @@
 export default function GR_transactions_table({pagina='gastos', data}){
 
   return (
-    <section className="all-table">
-      <table>
+    <section className="div-table">
+      <h2>Detalhamento dos Gastos</h2>
+      <table className="transactions-table">
         <thead>
           <tr>
             <th>Descrição</th>
@@ -29,27 +33,48 @@ export default function GR_transactions_table({pagina='gastos', data}){
         </thead>
         <tbody>
           {data.map((item) =>{
-            return(
+            return (
               <tr key={item.id}>
-                <td>{item.Descricao}</td>
-                <td>{item.Categoria}</td>
+                <td className="description">{item.Descricao}</td>
+                <td>
+                  <span className="category">{item.Categoria}</span>
+                </td>
                 <td>{item.Data}</td>
-                <td>{item.Tags}</td>
-                {pagina==='gastos' && (
+                <td>
+                  <div className="tags">
+                    {item.Tags?.map((tag) => (
+                      <span className="cor tag" key={tag}>
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </td>
+
+                {pagina === "gastos" && (
                   <>
-                    <td>{item.Pagamento}</td>
-                    <td>{item.Necessário ? 'Sim' : 'Não'}</td>
+                    <td>
+                      <span className="payment">{item.Pagamento}</span>
+                    </td>
+                    <td
+                      className={
+                        item.Necessário ? "necessary" : "not-necessary"
+                      }
+                    >
+                      {item.Necessário ? "Sim" : "Não"}
+                    </td>
                   </>
                 )}
-                <td>{item.pagamento}</td>
-                <td>{item.Necessário ? 'Sim' : 'Não'}</td>
-                <td>{item.Valor}</td>
-                <td>
-                  <button>Editar</button>
-                  <button>Excluir</button>
+                <td className="value">{formatCurrency(item.Valor)}</td>
+                <td className="actions">
+                  <button>
+                    <SquarePen size={20} color="#6B7C8E" />
+                  </button>
+                  <button>
+                    <Trash2 size={20} color="#6B7C8E" />
+                  </button>
                 </td>
               </tr>
-            )
+            );
           })}
         </tbody>
       </table>
