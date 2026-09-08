@@ -6,7 +6,7 @@ export default function Filters() {
         <div className="filter">
           <label htmlFor="month">MÊS</label>
           <select id="month">
-            <option value="">Todos os meses</option>
+            <option value="">[ mes atual ]</option>
             <option value="2026-07">Julho 2026</option>
             <option value="2026-08">Agosto 2026</option>
           </select>
