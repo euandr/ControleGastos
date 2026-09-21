@@ -17,8 +17,8 @@ export default function Header(props) {
           </button>
         </header>
         {modalAberto && (
-          <NewExpenseModal onClose={() => setModalAberto(false)} />
+          <NewExpenseModal onClose={() => setModalAberto(false)}  />
         )}
       </>
-    );
+    );  
 }

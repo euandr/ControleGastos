@@ -96,7 +96,10 @@ header button {
   color: #6b6b6b;
   background: #e6e9ed;
 }
-
+#novo-gasto {
+  padding-right: 30px;
+  cursor: pointer;
+}
 .pie-chart-container {
   display: flex;
   background-color: #ffffff;
@@ -113,7 +116,10 @@ header button {
   margin-left: 270px;
   gap: 30px;
 }
-
+.pesquisar-tag {
+  margin-top: 10px;
+  border-radius: 6px;
+}
 .div {
   font-size: 22px;
   font-weight: bold;
@@ -127,6 +133,40 @@ header button {
   align-items: center;
 
   border-radius: 10px;
+}
+.tags-options {
+  padding: 10px;
+  border: 1px solid #6e8ade5e;
+  border-radius: 7px;
+  margin-top: 10px;
+}
+.tags-options > button {
+  width: 100%;
+  border-radius: 7px;
+  border: 1px solid #6e8ade5e;
+  padding: 8px 12px;
+  text-align: left;
+  margin-top: 10px;
+  background-color: #eff6ff;
+  color: #2f6bec;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.tag-option {
+  padding: 2px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+.tag-option span {
+  font-weight: bold;
+  color: gray;
+}
+.tag-option button {
+
+  color: red;
 }
 
 .item-1 {
@@ -219,7 +259,7 @@ header button {
 }
 .modal {
   background-color: white;
-  width: 500px;
+  width: 700px;
   min-height: 400px;
   border-radius: 10px;
   padding: 30px;
@@ -238,7 +278,7 @@ header button {
 }
 .modal header h3 {
   font-weight: 900;
-  font-size: 20px;
+  font-size: 25px;
 }
 .modal header p {
   color: #6b7c8e;
@@ -250,11 +290,11 @@ header button {
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 20px;
 }
 .modal-footer button {
   border-radius: 7px;
-  padding: 5px 20px;
+  padding: 10px 30px;
   border: 1px solid #bdbec0;
 }
 
@@ -295,6 +335,12 @@ header button {
   display: flex;
   gap: 10px;
   margin-top: 10px;
+  
+}
+.valor-data-modal > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 .modal input {
   border: 1px solid #bdbec0;
@@ -334,6 +380,11 @@ header button {
   border-radius: 6px;
 }
 
+.input-date input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
 .input-date button {
   position: absolute;
   right: 10px;
@@ -345,15 +396,50 @@ header button {
   padding: 0;
   cursor: pointer;
 }
-.cat-modal {
+.cat-e-pagamento-modal {
+  display: flex;
+  gap: 10px;
+}
+.cat-e-pagamento-modal > div {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  flex: 1;
+}
+.background-inputs {
+  background-color: #adb0b326 !important;
+}
+.cat-e-pagamento-modal div select {
+  border: 1px solid #bdbec0;
+  padding: 10px 20px;
+  border-radius: 6px;
+  background-color: #ffffff;
+}
+.necessario-modal {
   display: flex;
   flex-direction: column;
   margin-top: 10px;
 }
-.cat-modal select {
+.necessario-modal > div {
+  border-radius: 7px;
   border: 1px solid #bdbec0;
-  padding: 10px 20px;
+  display: flex;
+}
+.necessario-modal button {
+  border: none;
   border-radius: 6px;
+  background-color: transparent;
+  padding: 5px 20px;
+  cursor: pointer;
+  flex: 1;
+  margin: 5px;
+  font-weight: bold;
+}
+.necessario-modal button.selecionado {
+  background: white;
+  border: 1px solid #bdbec0;
+  background-color: #ffffff;
+  color: #10b981;
 }
 .tags-modal {
   display: flex;

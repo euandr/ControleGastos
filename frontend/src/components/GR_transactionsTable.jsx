@@ -1,8 +1,8 @@
 import { formatCurrency } from "../utils/formatCurrency";
-
 import { SquarePen, Trash2 } from "lucide-react";
 
-
+import { useState } from "react";
+import NewExpenseModal from "./NewExpenseModal";
 // const gastos=[
 //   {'Descricao': 'Aluguel apartamento', 'Categoria':casa, 'Data': '12/08/2026', 'Tags':['fixo','mensal'], 'Necessário':'True', 'Valor':100.0},
 //   {'Descricao': 'Supermercado Central', 'Categoria':'almentação', 'Data': '12/08/2026', 'Tags':['essencial'], 'Necessário':'True', 'Valor':10.0},
@@ -10,6 +10,8 @@ import { SquarePen, Trash2 } from "lucide-react";
 //   ]
   
 export default function GR_transactions_table({pagina='gastos', data}){
+
+  const [modalAberto, setModalAberto] = useState(false);
 
   return (
     <section className="div-table">
@@ -66,7 +68,7 @@ export default function GR_transactions_table({pagina='gastos', data}){
                 )}
                 <td className="value">{formatCurrency(item.Valor)}</td>
                 <td className="actions">
-                  <button>
+                  <button id="editar-gasto" onClick={() => setModalAberto(true)}>
                     <SquarePen size={20} color="#6B7C8E" />
                   </button>
                   <button>
@@ -78,6 +80,9 @@ export default function GR_transactions_table({pagina='gastos', data}){
           })}
         </tbody>
       </table>
+      {modalAberto && (
+        <NewExpenseModal onClose={() => setModalAberto(false)}  />
+      )}
     </section>
   );
 }
