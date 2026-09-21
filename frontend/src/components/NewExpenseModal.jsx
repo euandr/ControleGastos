@@ -154,7 +154,7 @@ export default function NewExpenseModal({ onClose }) {
               onChange={(e) => setBuscaTag(e.target.value)}
               onFocus={() => setMostrarTags(true)}
               onBlur={() => setMostrarTags(false)}
-              className="pesquisar-tag"
+              className="pesquisar-tag background-inputs"
             />
             {mostrarTags && (
               <div className="tags-options">
@@ -179,11 +179,7 @@ export default function NewExpenseModal({ onClose }) {
           <button type="button" onClick={onClose} className="cancelar">
             Cancelar
           </button>
-          <button
-            type="button"
-            className="salvar"
-            onClick={onClose}
-          >
+          <button type="button" className="salvar" onClick={onClose}>
             Salvar
           </button>
         </footer>
